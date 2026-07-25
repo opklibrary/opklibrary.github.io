@@ -93,6 +93,7 @@ async function loadAppointments() {
                     if (radio.checked) {
                         selectedAppointment = slot.id;
                         console.log("Selected:", selectedAppointment);
+                        checkFormCompletion();
                     }
 
                 });
@@ -175,6 +176,26 @@ async function submitAppointment() {
 document
     .getElementById("submitAppointment")
     .onclick = submitAppointment;
+
+// Enable submit button only when form is complete
+const submitButton = document.getElementById("submitAppointment");
+const agreement = document.getElementById("agreement");
+
+function checkFormCompletion() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (name && email && phone && selectedAppointment && agreement.checked) {
+        submitButton.disabled = false;
+    } else {
+        submitButton.disabled = true;
+    }
+}
+
+document.addEventListener("input", checkFormCompletion);
+agreement.addEventListener("change", checkFormCompletion);
+
 
 
 // Start page
