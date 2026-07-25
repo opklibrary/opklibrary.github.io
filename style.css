@@ -16,6 +16,11 @@ body {
     max-width: 100%;
     height: auto;
     margin: 0 auto 20px auto;
+    transition: transform 0.2s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 /* =========================
