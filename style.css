@@ -190,3 +190,47 @@ body {
     }
 
 }
+
+/* =========================
+   USER INFORMATION FORM
+   ========================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* =========================
+   REASON FOR APPOINTMENT
+   ========================= */
+
+.reason-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.reason-options label {
+    font-weight: normal;
+}
