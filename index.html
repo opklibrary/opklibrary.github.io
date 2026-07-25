@@ -51,81 +51,87 @@
              USER INFORMATION FORM
              (Add name, email, phone, etc. here)
              ========================= -->
-        <h2>Your Information</h2>
+        <div class="form-section">
         
-        <div class="form-group">
-            <label for="name">Full Name *</label>
-            <input type="text" id="name" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="email">Email Address *</label>
-            <input type="email" id="email" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="whatTech">What technology are you bringing?</label>
-            <input
-                type="text"
-                id="whatTech"
-                placeholder="Laptop, iPhone, Kindle, etc.">
-        </div>
+            <h2>Your Information</h2>
+            
+            <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="whatTech">What technology are you bringing?</label>
+                <input
+                    type="text"
+                    id="whatTech"
+                    placeholder="Laptop, iPhone, Kindle, etc.">
+            </div>
 
-
+        </div>
+            
         <!-- =========================
              REASON FOR APPOINTMENT
              (Checkboxes and description)
              ========================= -->
-        <h2>Reason for Appointment</h2>
-
-        <div class="reason-options">
-        
-            <label>
-                <input type="radio" name="reason" id="learn" value="learn">
-                Learn something new
-            </label>
-        
-            <label>
-                <input type="radio" name="reason" id="need" value="need">
-                Need help using a device
-            </label>
-        
-            <label>
-                <input type="radio" name="reason" id="new" value="new">
-                Set up a new device
-            </label>
-        
-            <label>
-                <input type="radio" name="reason" id="help" value="help">
-                General tech help
-            </label>
-        
-            <label>
-                <input type="radio" name="reason" id="other" value="other">
-                Other
-            </label>
-        
-        </div>
+        <div class="form-section">
             
-        <div class="form-group">
-        
-            <label for="describeProblem">
-                Describe your problem
-            </label>
-        
-            <textarea
-                id="describeProblem"
-                rows="5"
-                placeholder="Tell us how we can help...">
-            </textarea>
-        
-        </div>
+            <h2>Reason for Appointment</h2>
+    
+            <div class="reason-options">
+            
+                <label>
+                    <input type="radio" name="reason" id="learn" value="learn">
+                    Learn something new
+                </label>
+            
+                <label>
+                    <input type="radio" name="reason" id="need" value="need">
+                    Need help using a device
+                </label>
+            
+                <label>
+                    <input type="radio" name="reason" id="new" value="new">
+                    Set up a new device
+                </label>
+            
+                <label>
+                    <input type="radio" name="reason" id="help" value="help">
+                    General tech help
+                </label>
+            
+                <label>
+                    <input type="radio" name="reason" id="other" value="other">
+                    Other
+                </label>
+            
+            </div>
+                
+            <div class="form-group">
+            
+                <label for="describeProblem">
+                    Describe your problem
+                </label>
+            
+                <textarea
+                    id="describeProblem"
+                    rows="5"
+                    placeholder="Tell us how we can help...">
+                </textarea>
+            
+            </div>
 
+        </div>
 
         <!-- =========================
              SUBMIT BUTTON
