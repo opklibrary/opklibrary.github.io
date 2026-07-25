@@ -28,11 +28,14 @@ body {
 ========================= */
 
 .page-header {
-    background-color: #2f6f3e;
-    color: white;
-    padding: 20px;
     text-align: center;
-    border-radius: 8px;
+    margin-bottom: 40px;
+
+    background-color: #22418b;
+    color: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+}
    
 }
 
