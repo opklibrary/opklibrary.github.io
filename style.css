@@ -147,6 +147,10 @@ body {
     transition: background-color 0.2s ease;
 }
 
+#submitAppointment {
+    background: #02224d;
+}
+
 #submitAppointment:hover {
     background-color: #357abd;
 }
