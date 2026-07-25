@@ -28,8 +28,12 @@ body {
 ========================= */
 
 .page-header {
+    background-color: #2f6f3e;
+    color: white;
+    padding: 20px;
     text-align: center;
-    margin-bottom: 40px;
+    border-radius: 8px;
+   
 }
 
 .page-header h1 {
