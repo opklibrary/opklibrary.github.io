@@ -128,7 +128,34 @@ body {
     font-size: 18px;
 }
 
+/* =========================
+   Confirmation Checkbox
+========================= */
 
+.confirmation {
+    max-width: 700px;
+    margin: 30px auto 10px auto;
+    padding: 15px;
+
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.confirmation label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.confirmation input {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
 /* =========================
    Submit Button
 ========================= */
