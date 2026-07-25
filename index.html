@@ -82,41 +82,47 @@
              (Checkboxes and description)
              ========================= -->
         <h2>Reason for Appointment</h2>
+
+        <div class="reason-options">
+            <label>
+                <input type="checkbox" id="learn">
+                Learn something new
+            </label>
+            
+            <label>
+                <input type="checkbox" id="need">
+                Need help using a device
+            </label>
+            
+            <label>
+                <input type="checkbox" id="new">
+                Set up a new device
+            </label>
+            
+            <label>
+                <input type="checkbox" id="help">
+                General tech help
+            </label>
+            
+            <label>
+                <input type="checkbox" id="other">
+                Other
+            </label>
+        </div>
+            
+        <div class="form-group">
         
-        <label>
-            <input type="checkbox" id="learn">
-            Learn something new
-        </label>
+            <label for="describeProblem">
+                Describe your problem
+            </label>
         
-        <label>
-            <input type="checkbox" id="need">
-            Need help using a device
-        </label>
+            <textarea
+                id="describeProblem"
+                rows="5"
+                placeholder="Tell us how we can help...">
+            </textarea>
         
-        <label>
-            <input type="checkbox" id="new">
-            Set up a new device
-        </label>
-        
-        <label>
-            <input type="checkbox" id="help">
-            General tech help
-        </label>
-        
-        <label>
-            <input type="checkbox" id="other">
-            Other
-        </label>
-        
-        <label for="describeProblem">
-            Describe your problem:
-        </label>
-        
-        <textarea
-            id="describeProblem"
-            rows="4"
-            placeholder="Tell us how we can help..."
-        ></textarea>
+        </div>
 
 
         <!-- =========================
