@@ -197,6 +197,17 @@ body > h2 {
 #submitAppointment:hover {
     background-color: #357abd;
 }
+#submitAppointment:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+#submitAppointment:not(:disabled) {
+    background-color: #51ae43;
+    color: white;
+    cursor: pointer;
+}
 
 
 /* =========================
