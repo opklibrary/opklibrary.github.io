@@ -121,6 +121,18 @@ async function submitAppointment() {
         return;
     }
 
+    // Get user information
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const whatTech = document.getElementById("whatTech").value.trim();
+
+    // Check required fields
+    if (!name || !email || !phone) {
+        alert("Please fill out your name, email, and phone number.");
+        return;
+    }
+
     const { error } = await client
         .from("appointments")
         .update({ booked: true })
@@ -128,6 +140,25 @@ async function submitAppointment() {
 
     if (error) {
         console.error(error);
+        return;
+    }
+
+    // Save user information
+    const { error: userError } = await client
+        .from("user_info")
+        .insert([
+            {
+                appointment_id: selectedAppointment,
+                name: name,
+                phone_number: phone,
+                email: email,
+                what_tech: whatTech
+            }
+        ]);
+    
+    if (userError) {
+        console.error(userError);
+        alert("Unable to save user information.");
         return;
     }
 
