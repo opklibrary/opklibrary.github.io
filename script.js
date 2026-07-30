@@ -222,64 +222,6 @@ loadAppointments();
 // STAFF LOGIN
 // =========================
 
-const loginModal = document.getElementById("loginModal");
-const adminPassword = document.getElementById("adminPassword");
-
 document.getElementById("adminLogin").addEventListener("click", () => {
-
-    loginModal.style.display = "flex";
-
-    adminPassword.value = "";
-
-    adminPassword.focus();
-
+    window.location.href = "admin-login.html";
 });
-
-document.getElementById("cancelLogin").addEventListener("click", () => {
-
-    loginModal.style.display = "none";
-    adminPassword.value = "";
-
-});
-
-// Close the modal if the dark background is clicked
-loginModal.addEventListener("click", (event) => {
-
-    if (event.target === loginModal) {
-
-        loginModal.style.display = "none";
-        adminPassword.value = "";
-    }
-
-});
-
-
-document.getElementById("confirmLogin").addEventListener("click", login);
-
-adminPassword.addEventListener("keydown", (event) => {
-
-    if (event.key === "Enter") {
-
-        login();
-
-    }
-
-});
-
-function login() {
-
-    if (adminPassword.value === "O") {
-
-        window.location.href = "admin.html";
-
-    } else {
-
-        alert("Incorrect password.");
-
-        adminPassword.value = "";
-
-        adminPassword.focus();
-
-    }
-
-}
