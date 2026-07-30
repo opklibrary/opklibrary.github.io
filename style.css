@@ -372,6 +372,17 @@ body > h2 {
    ADMIN PAGE
    ========================= */
 
+
+#errorMessage {
+    color: red;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
 #appointmentList {
 
     margin-top: 30px;
