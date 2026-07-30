@@ -44,12 +44,27 @@ const today = new Date().toISOString().split("T")[0];
     }
     
     // Remove past appointments and already booked times
-    const now = new Date();
-    
-const availableAppointments = data.filter(slot => {
-    return slot.booked === false;
-});
+const now = new Date();
 
+const availableAppointments = data.filter(slot => {
+
+    // Split "12:00 AM - 1:00 AM" and only use the start time
+    const startTime = slot.time.split(" - ")[0];
+
+    const appointmentDateTime = new Date(
+        `${slot.date} ${startTime}`
+    );
+
+    console.log({
+        date: slot.date,
+        time: slot.time,
+        appointmentDateTime,
+        now
+    });
+
+    return appointmentDateTime > now && slot.booked === false;
+
+});
     const container = document.getElementById("dates");
     container.innerHTML = "";
 
