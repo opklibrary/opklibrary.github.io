@@ -1,1 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <!-- =========================
+         PAGE INFORMATION
+         ========================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OPK Tech Help Administration</title>
+
+    <!-- Same stylesheet as main page -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         PAGE HEADER
+         ========================= -->
+
+    <header class="page-header">
+
+        <!-- Clickable library logo -->
+        <a href="https://buffalolib.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+
+            <img src="logo.png"
+                 alt="Orchard Park Library Logo"
+                 class="logo">
+
+        </a>
+
+        <div class="header-text">
+
+            <h1>Orchard Park Library Tech Help</h1>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE INTRODUCTION
+         ========================= -->
+
+    <div class="intro">
+
+        <h2>Appointment Administration</h2>
+
+        <p>
+            View and manage upcoming Tech Help appointments.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
+
+    <main class="container">
+
+
+        <!-- =========================
+             SEARCH (Future Feature)
+             ========================= -->
+
+        <div class="form-section">
+
+            <label for="searchAppointments">
+                Search by Name
+            </label>
+
+            <input
+                type="text"
+                id="searchAppointments"
+                placeholder="Search appointments...">
+
+        </div>
+
+
+        <!-- =========================
+             FUTURE FILTERS
+             ========================= -->
+
+        <div class="form-section">
+
+            <button id="showUpcoming">
+                Upcoming Appointments
+            </button>
+
+            <button id="showPast">
+                Past Appointments
+            </button>
+
+            <button id="exportCSV">
+                Export CSV
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             APPOINTMENTS LIST
+             JavaScript will fill this in.
+             ========================= -->
+
+        <div id="appointmentList">
+
+            <!-- Example:
+
+            July 30
+
+            9:00 AM
+
+            Amanda
+
+            ...
+
+            -->
+
+        </div>
+
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>
