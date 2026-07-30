@@ -47,12 +47,7 @@ const today = new Date().toISOString().split("T")[0];
     const now = new Date();
     
 const availableAppointments = data.filter(slot => {
-    const slotDateTime = new Date(
-        `${slot.date}T${slot.time}`
-    );
-
-    return slotDateTime > now && slot.booked === false;
-
+    return slot.booked === false;
 });
 
     const container = document.getElementById("dates");
