@@ -217,3 +217,23 @@ agreement.addEventListener("change", checkFormCompletion);
 
 // Start page
 loadAppointments();
+
+// =========================
+// STAFF LOGIN
+// =========================
+
+document.getElementById("adminLogin").addEventListener("click", () => {
+
+    const password = prompt("Enter administrator password:");
+
+    if (password === "O") {
+
+        window.location.href = "admin.html";
+
+    } else if (password !== null) {
+
+        alert("Incorrect password.");
+
+    }
+
+});
