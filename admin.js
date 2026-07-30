@@ -47,7 +47,7 @@ async function loadAppointments() {
             booked,
             user_info (
                 name,
-                phone,
+                phone_number,
                 email,
                 what_tech
             ),
