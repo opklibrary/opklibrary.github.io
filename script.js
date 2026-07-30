@@ -42,6 +42,11 @@ const today = new Date().toISOString().split("T")[0];
         console.error(error);
         return;
     }
+    
+    // Remove past appointments and already booked times
+const availableAppointments = data.filter(slot => {
+    return slot.date >= today && slot.booked === false;
+});
 
     const container = document.getElementById("dates");
     container.innerHTML = "";
@@ -49,7 +54,7 @@ const today = new Date().toISOString().split("T")[0];
     // Group appointments by date
     const groupedDates = {};
 
-    data.forEach(slot => {
+ availableAppointments.forEach(slot => {
 
         if (!groupedDates[slot.date]) {
             groupedDates[slot.date] = [];
