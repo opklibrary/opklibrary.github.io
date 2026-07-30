@@ -309,3 +309,53 @@ body > h2 {
     text-align: center;
     margin-bottom: 30px;
 }
+
+/* =========================
+   ADMIN PAGE
+   ========================= */
+
+#appointmentList{
+
+    margin-top:30px;
+
+}
+
+/* One appointment */
+
+.appointment-card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+}
+
+/* Date heading */
+
+.date-heading{
+
+    margin-top:40px;
+
+    margin-bottom:15px;
+
+}
+
+/* Appointment buttons */
+
+.admin-buttons{
+
+    margin-top:15px;
+
+}
+
+.admin-buttons button{
+
+    margin-right:10px;
+
+}
