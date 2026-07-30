@@ -108,8 +108,9 @@ data.forEach((appointment) => {
     `;
 
     container.appendChild(card);
-});
+    });
 
+}
 
 // Run when admin page opens
 loadAppointments();
