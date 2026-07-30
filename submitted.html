@@ -4,61 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
-    <!-- Stylesheet -->
+
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="style.css">
-</head>
-    
-<body>
 
-    <!-- =========================
-         PAGE HEADER
-         ========================= -->
-    <header class="page-header"> 
-
-        <!-- Library logo (clickable) -->
-        <a href="https://buffalolib.org/"
-            target="_blank"
-            rel="noopener noreferrer">
-                <img src="logo.png" alt="Orchard Park Library Logo" class="logo">
-        </a>
-
-        <!-- Page title and instructions -->
-        <div class="header-text">
-            <h1>Orchard Park Library Tech Help</h1>
-        </header>
-    
+    <!-- Page-specific styles -->
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
             background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
         }
 
-        h1 {
+        .thank-you-container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 0 20px;
             text-align: center;
+        }
+
+        .thank-you-container h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .thank-you-container p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 18px 0;
+        }
+
+        .cancel {
+            margin-top: 35px;
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-<div class="thank-you-container">
-    
-    <h1>Thank you!</h1>
-    
-    <h2>Your appointment has been submitted.</h2>
-    
-    <h3>You will recieve a confirmation phone call or email closer to your appointment time.</h3>
-    
-    <h3>Please arrive 10 minutes before your appointment time, and inform the information desk that you have arrived.</h3>
-    
-<h3>Please bring any electronics fully charged, and their proper charger in case it is needed.</h3>
-    
 
-   <p><strong>To Cancel or Reschedule:</strong> Please call us at (716) 662-9851 or visit us in person.</p>
-      </div>
+    <!-- =========================
+         PAGE HEADER
+         ========================= -->
+    <header class="page-header">
+
+        <!-- Library logo -->
+        <a href="https://buffalolib.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+            <img src="logo.png"
+                 alt="Orchard Park Library Logo"
+                 class="logo">
+        </a>
+
+        <!-- Header text -->
+        <div class="header-text">
+            <h1>Orchard Park Library Tech Help</h1>
+        </div>
+
+    </header>
+
+    <!-- Thank You Message -->
+    <div class="thank-you-container">
+
+        <h2>Thank You!</h2>
+
+        <p>Your appointment has been submitted successfully.</p>
+
+        <p>
+            You will receive a confirmation phone call or email
+            closer to your appointment time.
+        </p>
+
+        <p>
+            Please arrive 10 minutes before your appointment time
+            and inform the information desk that you have arrived.
+        </p>
+
+        <p>
+            Please bring any electronics fully charged,
+            along with the appropriate charger if applicable.
+        </p>
+
+        <p class="cancel">
+            To Cancel or Reschedule:<br>
+            Please call us at <strong>(716) 662-9851</strong>
+            or visit us in person.
+        </p>
+
+    </div>
+
 </body>
 </html>
