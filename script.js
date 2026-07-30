@@ -222,18 +222,51 @@ loadAppointments();
 // STAFF LOGIN
 // =========================
 
+const loginModal = document.getElementById("loginModal");
+const adminPassword = document.getElementById("adminPassword");
+
 document.getElementById("adminLogin").addEventListener("click", () => {
 
-    const password = prompt("Enter administrator password:");
+    loginModal.style.display = "flex";
 
-    if (password === "O") {
+    adminPassword.value = "";
 
-        window.location.href = "admin.html";
+    adminPassword.focus();
 
-    } else if (password !== null) {
+});
 
-        alert("Incorrect password.");
+document.getElementById("cancelLogin").addEventListener("click", () => {
+
+    loginModal.style.display = "none";
+
+});
+
+document.getElementById("confirmLogin").addEventListener("click", login);
+
+adminPassword.addEventListener("keydown", (event) => {
+
+    if (event.key === "Enter") {
+
+        login();
 
     }
 
 });
+
+function login() {
+
+    if (adminPassword.value === "O") {
+
+        window.location.href = "admin.html";
+
+    } else {
+
+        alert("Incorrect password.");
+
+        adminPassword.value = "";
+
+        adminPassword.focus();
+
+    }
+
+}
