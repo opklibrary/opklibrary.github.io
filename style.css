@@ -543,3 +543,22 @@ body > h2 {
     width: 120px;
 
 }
+
+/* =========================
+   THANK YOU PAGE
+   ========================= */
+.thank-you-container {
+    max-width: 700px;
+    margin: 60px auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.thank-you-container h1 {
+    margin-bottom: 20px;
+}
+
+.thank-you-container p {
+    margin: 15px 0;
+    line-height: 1.5;
+}
