@@ -100,8 +100,6 @@ const availableAppointments = data.filter(slot => {
 
                 });
 
-            }
-
             option.appendChild(radio);
             option.appendChild(labelText);
 
