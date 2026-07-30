@@ -44,8 +44,15 @@ const today = new Date().toISOString().split("T")[0];
     }
     
     // Remove past appointments and already booked times
+    const now = new Date();
+    
 const availableAppointments = data.filter(slot => {
-    return slot.date >= today && slot.booked === false;
+    const slotDateTime = new Date(
+        `${slot.date}T${slot.time}`
+    );
+
+    return slotDateTime > now && slot.booked === false;
+
 });
 
     const container = document.getElementById("dates");
