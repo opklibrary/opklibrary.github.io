@@ -77,6 +77,13 @@ data.forEach((appointment) => {
 
     const user = appointment.user_info?.[0];
     const reason = appointment.why_appointment?.[0];
+    
+    data.forEach((appointment) => {
+
+    console.log("FULL APPOINTMENT:", appointment);
+
+    const user = appointment.user_info?.[0];
+    const reason = appointment.why_appointment?.[0];
 
     const card = document.createElement("div");
     card.className = "appointment-card";
