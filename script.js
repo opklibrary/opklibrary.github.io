@@ -28,6 +28,9 @@ function formatDate(dateString) {
 // Load appointments
 async function loadAppointments() {
 
+    // Get today's date in YYYY-MM-DD format
+const today = new Date().toISOString().split("T")[0];
+    
     const { data, error } = await client
         .from("appointments")
         .select("*")
