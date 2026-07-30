@@ -180,7 +180,7 @@ async function submitAppointment() {
         return;
     }
 
-    alert("Appointment submitted!");
+    window.location.href = "thank-you.html";
 
     selectedAppointment = null;
 
