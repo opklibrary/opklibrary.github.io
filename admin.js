@@ -2,8 +2,9 @@
 // SUPABASE CONNECTION
 // =========================
 
-const PROJECT_URL = "https://wzjlytqilsjcboqpwldz.supabase.co";
-const PUBLISHABLE_KEY = "YOUR_PUBLISHABLE_KEY";
+// 1. Connect to Supabase
+const PROJECT_URL = "https://wzjlytqilsjcboqpwldz.supabase.co/";
+const PUBLISHABLE_KEY = "sb_publishable_Nyt-q7qFiYGd7aV25sgGuQ_yk-1gHxN";
 
 const client = window.supabase.createClient(
     PROJECT_URL,
