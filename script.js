@@ -43,15 +43,34 @@ const today = new Date().toISOString().split("T")[0];
         return;
     }
     
-    // Remove past appointments and already booked times
-    const now = new Date();
-    
-const availableAppointments = data.filter(slot => {
-    const slotDateTime = new Date(
-        `${slot.date}T${slot.time}`
-    );
+   // Remove past appointments, past times today, and booked times
+const now = new Date();
 
-    return slotDateTime > now && slot.booked === false;
+const availableAppointments = data.filter(slot => {
+
+    // Get the starting time only
+    const startTime = slot.time.split(" - ")[0];
+
+    const [time, modifier] = startTime.split(" ");
+
+    let [hours, minutes] = time.split(":");
+
+    hours = parseInt(hours);
+
+    if (modifier === "PM" && hours !== 12) {
+        hours += 12;
+    }
+
+    if (modifier === "AM" && hours === 12) {
+        hours = 0;
+    }
+
+    const slotDateTime = new Date(slot.date);
+    slotDateTime.setHours(hours);
+    slotDateTime.setMinutes(parseInt(minutes));
+    slotDateTime.setSeconds(0);
+
+    return slotDateTime > now;
 
 });
 
