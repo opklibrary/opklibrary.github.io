@@ -31,3 +31,47 @@ async function checkLogin() {
 }
 
 checkLogin();
+
+// =========================
+// LOAD BOOKED APPOINTMENTS
+// =========================
+
+async function loadAppointments() {
+
+    const { data, error } = await client
+        .from("appointments")
+        .select(`
+            id,
+            date,
+            time,
+            booked,
+            user_info (
+                name,
+                phone,
+                email,
+                what_tech
+            ),
+            why_appointment (
+                learn,
+                need,
+                new,
+                help,
+                other,
+                describe_problem
+            )
+        `)
+        .eq("booked", true)
+        .order("date")
+        .order("time");
+
+    if (error) {
+        console.error("Error loading appointments:", error);
+        return;
+    }
+
+    console.log(data);
+}
+
+
+// Run when admin page opens
+loadAppointments();
