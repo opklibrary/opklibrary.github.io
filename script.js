@@ -43,7 +43,7 @@ const today = new Date().toISOString().split("T")[0];
         return;
     }
     
-     // Remove past appointments and already booked times
+    // Remove past appointments and already booked times
     const now = new Date();
     
 const availableAppointments = data.filter(slot => {
@@ -53,8 +53,8 @@ const availableAppointments = data.filter(slot => {
 
     return slotDateTime > now && slot.booked === false;
 
- });
-    
+});
+
     const container = document.getElementById("dates");
     container.innerHTML = "";
 
