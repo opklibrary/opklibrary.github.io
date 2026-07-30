@@ -314,75 +314,91 @@ body > h2 {
    ADMIN PAGE
    ========================= */
 
-#appointmentList{
+#appointmentList {
 
-    margin-top:30px;
+    margin-top: 30px;
 
 }
 
-/* One appointment */
+/* One appointment card */
 
-.appointment-card{
+.appointment-card {
 
-    background:white;
+    background: white;
+    border-radius: 12px;
 
-    border-radius:12px;
+    padding: 20px;
 
-    padding:20px;
+    margin-bottom: 20px;
 
-    margin-bottom:20px;
-
-    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
 
 }
 
 /* Date heading */
 
-.date-heading{
+.date-heading {
 
-    margin-top:40px;
-
-    margin-bottom:15px;
+    margin-top: 40px;
+    margin-bottom: 15px;
 
 }
 
 /* =========================
-   ADMIN PAGE BUTTONS
+   ADMIN TOOLBAR
    ========================= */
 
-.form-section button {
+.admin-toolbar {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+    margin: 30px 0;
+
+}
+
+.admin-toolbar button {
+
+    width: 220px;
 
     background-color: white;
+
     color: #333;
 
-    font-size: 16px;
-    font-weight: 600;
+    border: 2px solid #d9d9d9;
 
-    padding: 12px 24px;
-
-    border: 2px solid #d0d0d0;
     border-radius: 10px;
+
+    padding: 14px 20px;
+
+    font-size: 16px;
+
+    font-weight: 600;
 
     cursor: pointer;
 
     transition: all 0.25s ease;
+
 }
 
-/* Mouse hover */
-
-.form-section button:hover {
+.admin-toolbar button:hover {
 
     background-color: #bfe8ff;
-    border-color: #6bbde8;
+
+    border-color: #74bfe6;
 
     transform: translateY(-2px);
 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+
 }
 
-/* While being clicked */
-
-.form-section button:active {
+.admin-toolbar button:active {
 
     transform: translateY(0);
 
