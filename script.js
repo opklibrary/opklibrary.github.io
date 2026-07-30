@@ -238,6 +238,7 @@ document.getElementById("adminLogin").addEventListener("click", () => {
 document.getElementById("cancelLogin").addEventListener("click", () => {
 
     loginModal.style.display = "none";
+    adminPassword.value = "";
 
 });
 
@@ -247,7 +248,7 @@ loginModal.addEventListener("click", (event) => {
     if (event.target === loginModal) {
 
         loginModal.style.display = "none";
-
+        adminPassword.value = "";
     }
 
 });
