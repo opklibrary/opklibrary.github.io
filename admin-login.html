@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Login</title>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+    <!-- =========================
+         PAGE HEADER
+         ========================= -->
+
+    <header class="page-header">
+
+        <a href="https://buffalolib.org/"
+           target="_blank"
+           rel="noopener noreferrer">
+
+            <img src="logo.png"
+                 alt="Orchard Park Library Logo"
+                 class="logo">
+
+        </a>
+
+        <div class="header-text">
+            <h1>Orchard Park Library Tech Help</h1>
+        </div>
+
+    </header>
+
+    <!-- =========================
+         LOGIN FORM
+         ========================= -->
+
+    <main class="container">
+
+        <h2>Staff Login</h2>
+
+        <div class="form-section">
+
+            <label for="email">Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email">
+
+        </div>
+
+        <div class="form-section">
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password">
+
+        </div>
+
+        <button onclick="login()">
+            Sign In
+        </button>
+
+        <p id="errorMessage"></p>
+
+    </main>
+
+    <script src="admin-login.js"></script>
+
+</body>
+</html>
