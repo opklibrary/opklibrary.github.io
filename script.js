@@ -241,6 +241,18 @@ document.getElementById("cancelLogin").addEventListener("click", () => {
 
 });
 
+// Close the modal if the dark background is clicked
+loginModal.addEventListener("click", (event) => {
+
+    if (event.target === loginModal) {
+
+        loginModal.style.display = "none";
+
+    }
+
+});
+
+
 document.getElementById("confirmLogin").addEventListener("click", login);
 
 adminPassword.addEventListener("keydown", (event) => {
