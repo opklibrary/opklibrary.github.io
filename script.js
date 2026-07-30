@@ -34,6 +34,7 @@ const today = new Date().toISOString().split("T")[0];
     const { data, error } = await client
         .from("appointments")
         .select("*")
+        .eq("booked", false)
         .order("date")
         .order("time");
 
@@ -83,13 +84,6 @@ const today = new Date().toISOString().split("T")[0];
 
             const labelText = document.createElement("span");
             labelText.textContent = slot.time;
-
-            if (slot.booked) {
-
-                radio.disabled = true;
-                labelText.textContent += " (Booked)";
-
-            } else {
 
                 radio.addEventListener("change", () => {
 
