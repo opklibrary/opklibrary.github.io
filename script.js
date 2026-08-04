@@ -211,7 +211,7 @@ console.log("Type:", typeof selectedAppointment);
         return;
     }
     
-    window.location.href = "submitted.html";
+    //window.location.href = "submitted.html";
 
     selectedAppointment = null;
 
