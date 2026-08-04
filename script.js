@@ -31,17 +31,20 @@ async function loadAppointments() {
     // Get today's date in YYYY-MM-DD format
 const today = new Date().toISOString().split("T")[0];
     
-    const { data, error } = await client
-        .from("appointments")
-        .select("*")
-        .eq("booked", false)
-        .order("date")
-        .order("time");
+  const { data: updatedAppointment, error } = await client
+    .from("appointments")
+    .update({ booked: true })
+    .eq("id", selectedAppointment)
+    .select();
 
-    if (error) {
-        console.error(error);
-        return;
-    }
+console.log("Updated appointment:", updatedAppointment);
+console.log("Update error:", error);
+
+if (error) {
+    console.error("BOOKED UPDATE ERROR:", error);
+    alert("Unable to mark appointment as booked: " + error.message);
+    return;
+}
     
     // Remove past appointments and already booked times
 const now = new Date();
