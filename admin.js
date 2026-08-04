@@ -76,6 +76,8 @@ container.innerHTML = "";
 data.forEach((appointment) => {
 
     console.log("FULL APPOINTMENT:", appointment);
+    console.log("USER INFO:", appointment.user_info);
+console.log("WHY APPOINTMENT:", appointment.why_appointment);
 
     const user = appointment.user_info?.[0];
     const reason = appointment.why_appointment?.[0];
