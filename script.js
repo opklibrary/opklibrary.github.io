@@ -145,9 +145,17 @@ async function submitAppointment() {
     const phone = document.getElementById("phone").value.trim();
     const whatTech = document.getElementById("whatTech").value.trim();
 
+      // Get reason for appointment
+    const learn = document.getElementById("learn").checked;
+    const need = document.getElementById("need").checked;
+    const newDevice = document.getElementById("new").checked;
+    const help = document.getElementById("help").checked;
+    const other = document.getElementById("other").checked;
+    const describeProblem = document.getElementById("describeProblem").value.trim();
+
     // Check required fields
     if (!name || !email || !phone) {
-        alert("Please fill out your name, email, and phone number.");
+        alert("Please fill out your name and phone number. Please write NULL for email if you do not have one.");
         return;
     }
 
@@ -180,6 +188,27 @@ async function submitAppointment() {
         return;
     }
 
+       // Save reason for appointment
+    const { error: reasonError } = await client
+        .from("why_appointment")
+        .insert([
+            {
+                appointment_id: selectedAppointment,
+                learn: learn,
+                need: need,
+                new: newDevice,
+                help: help,
+                other: other,
+                describe_problem: describeProblem
+            }
+        ]);
+
+    if (reasonError) {
+        console.error(reasonError);
+        alert("Unable to save reason for appointment.");
+        return;
+    }
+    
     window.location.href = "submitted.html";
 
     selectedAppointment = null;
