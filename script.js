@@ -182,12 +182,11 @@ async function submitAppointment() {
             }
         ]);
     
-    if (userError) {
-        console.error(userError);
-        alert("Unable to save user information.");
-        return;
-    }
-
+   if (userError) {
+    console.error("USER INFO ERROR:", userError);
+    alert("Unable to save user information: " + userError.message);
+    return;
+}
        // Save reason for appointment
     const { error: reasonError } = await client
         .from("why_appointment")
