@@ -37,9 +37,6 @@ const today = new Date().toISOString().split("T")[0];
     .eq("id", selectedAppointment)
     .select();
 
-console.log("Updated appointment:", updatedAppointment);
-console.log("Update error:", error);
-
 if (error) {
     console.error("BOOKED UPDATE ERROR:", error);
     alert("Unable to mark appointment as booked: " + error.message);
