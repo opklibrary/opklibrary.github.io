@@ -158,7 +158,10 @@ async function submitAppointment() {
         alert("Please fill out your name and phone number. Please write NULL for email if you do not have one.");
         return;
     }
-
+    
+console.log("Selected appointment:", selectedAppointment);
+console.log("Type:", typeof selectedAppointment);
+    
     const { error } = await client
         .from("appointments")
         .update({ booked: true })
