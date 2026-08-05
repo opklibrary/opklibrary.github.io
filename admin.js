@@ -223,7 +223,13 @@ function displayAppointments(data) {
                     ${submittedText}
                 </p>
             `;
-        
+
+            const confirmButton = card.querySelector(".confirm-button");
+
+            confirmButton.addEventListener("click", () => {
+                card.classList.toggle("confirmed");
+            });
+            
             container.appendChild(card);
         
         });
