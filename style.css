@@ -105,15 +105,15 @@ body > h2 {
    ========================= */
 
 .month-heading {
-    text-align: center;
-    font-size: 28px;
-    margin: 35px 0 20px;
+    grid-column: 1 / -1;
 
-    padding-bottom: 10px;
+    margin: 40px 0 0 0;
+    padding: 0 0 10px 0;
 
-    border-bottom: 3px solid #51ae43;
+    border-bottom: 2px solid #d9d9d9;
+
+    font-size: 26px;
 }
-
 
 /* =========================
    CALENDAR GRID
