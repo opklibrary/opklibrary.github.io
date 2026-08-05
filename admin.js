@@ -76,6 +76,9 @@ async function loadAppointments() {
 
 if (error) {
     console.error("Error loading appointments:", error);
+    console.error("Error message:", error.message);
+    console.error("Error details:", error.details);
+    console.error("Error hint:", error.hint);
     return;
 }
 
