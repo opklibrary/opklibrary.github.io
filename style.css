@@ -483,6 +483,17 @@ body > h2 {
 }
 
 /* =========================
+   ADMIN MONTH HEADINGS
+   ========================= */
+
+.month-heading {
+    margin: 40px 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #d9d9d9;
+    font-size: 26px;
+}
+
+/* =========================
    STAFF LOGIN MODAL
    ========================= */
 
