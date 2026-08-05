@@ -398,21 +398,6 @@ body > h2 {
 
 }
 
-/* One appointment card */
-
-.appointment-card {
-
-    background: white;
-    border-radius: 12px;
-
-    padding: 20px;
-
-    margin-bottom: 20px;
-
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
-
-}
-
 /* Date heading */
 
 .date-heading {
@@ -625,6 +610,16 @@ body > h2 {
 
 .appointment-card p {
     margin: 6px 0;
+}
+
+/* =========================
+   APPOINTMENT DATE
+   ========================= */
+
+.appointment-card h2 {
+    font-size: 28px;
+    color: #4b2c5e;
+    margin: 0 0 8px 0;
 }
 
 /* =========================
