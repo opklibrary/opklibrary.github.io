@@ -387,6 +387,19 @@ body > h2 {
 
 }
 
+
+.confirmed-button {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.confirmed-button:hover {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
 /* =========================
    Confirmation Checkbox
 ========================= */
