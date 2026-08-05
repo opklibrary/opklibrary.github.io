@@ -53,6 +53,7 @@ async function loadAppointments() {
             date,
             time,
             booked,
+            staff_initials,
             cancelled,
             user_info (
                 name,
