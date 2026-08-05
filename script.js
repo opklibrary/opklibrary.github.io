@@ -332,6 +332,8 @@ if (appointmentFetchError) {
         alert("Appointment was saved, but the email notification could not be sent.");
         return;
     }
+
+    console.log("Appointment email sent successfully:", emailData);
     
     window.location.href = "submitted.html";
 
