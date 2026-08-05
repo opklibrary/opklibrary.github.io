@@ -231,8 +231,10 @@ function displayAppointments(data) {
             const confirmButton = card.querySelector(".confirm-button");
 
             confirmButton.addEventListener("click", () => {
-                card.classList.toggle("confirmed");
-                confirmButton.classList.toggle("confirmed-button");
+                const isConfirmed = card.classList.toggle("confirmed");
+            
+                confirmButton.classList.toggle("confirmed-button", isConfirmed);
+                confirmButton.textContent = isConfirmed ? "Confirmed" : "Confirm";
             });
             
             container.appendChild(card);
