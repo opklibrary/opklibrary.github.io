@@ -298,6 +298,22 @@ console.log("Type:", typeof selectedAppointment);
         return;
     }
     
+     // Send email notification
+    const { data: emailData, error: emailError } = await client.functions.invoke(
+        "send-appointment-email",
+        {
+            body: {
+                date: appointmentData.date,
+                time: appointmentData.time,
+                name: name,
+                email: email,
+                phone: phone,
+                what_tech: whatTech,
+                reason: describeProblem
+            }
+        }
+    );
+    
     window.location.href = "submitted.html";
 
     selectedAppointment = null;
