@@ -137,7 +137,13 @@ async function loadAppointments() {
 
             const heading = document.createElement("h3");
             heading.className = "day-heading";
-
+            
+heading.classList.add(
+    dateObject.toLocaleDateString("en-US", {
+        month: "long"
+    }).toLowerCase()
+);
+            
             heading.textContent = dateObject.toLocaleDateString("en-US", {
                 weekday: "short",
                 month: "long",
