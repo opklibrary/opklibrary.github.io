@@ -245,6 +245,19 @@ async function submitAppointment() {
     
 console.log("Selected appointment:", selectedAppointment);
 console.log("Type:", typeof selectedAppointment);
+
+    // Get appointment date and time
+const { data: appointmentData, error: appointmentFetchError } = await client
+    .from("appointments")
+    .select("date, time")
+    .eq("id", selectedAppointment)
+    .single();
+
+if (appointmentFetchError) {
+    console.error("APPOINTMENT FETCH ERROR:", appointmentFetchError);
+    alert("Unable to find the selected appointment.");
+    return;
+}
     
     const { error } = await client
     .from("appointments")
