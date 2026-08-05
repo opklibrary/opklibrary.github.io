@@ -228,6 +228,7 @@ function displayAppointments(data) {
 
             confirmButton.addEventListener("click", () => {
                 card.classList.toggle("confirmed");
+                confirmButton.classList.toggle("confirmed-button");
             });
             
             container.appendChild(card);
