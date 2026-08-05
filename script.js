@@ -298,7 +298,7 @@ console.log("Type:", typeof selectedAppointment);
         return;
     }
     
-     // Send email notification
+    // Send email notification
     const { data: emailData, error: emailError } = await client.functions.invoke(
         "send-appointment-email",
         {
@@ -313,6 +313,12 @@ console.log("Type:", typeof selectedAppointment);
             }
         }
     );
+
+    if (emailError) {
+        console.error("EMAIL ERROR:", emailError);
+        alert("Appointment was saved, but the email notification could not be sent.");
+        return;
+    }
     
     window.location.href = "submitted.html";
 
