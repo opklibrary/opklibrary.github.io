@@ -380,6 +380,13 @@ body > h2 {
 
 }
 
+.confirm-button:hover {
+
+    background: #d4edda;
+    border-color: #28a745;
+
+}
+
 /* =========================
    Confirmation Checkbox
 ========================= */
