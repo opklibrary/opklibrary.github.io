@@ -319,32 +319,65 @@ body > h2 {
 }
 
 /* =========================
-   APPOINTMENT STATUS FOOTER
+   Appointment Action Buttons
    ========================= */
 
 .appointment-status {
-    margin: 20px -20px -20px -20px;
-    padding: 12px 20px;
-    background-color: #eeeeee;
-    border-top: 1px solid #d5d5d5;
-    border-radius: 0 0 10px 10px;
 
     display: flex;
-    gap: 10px;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 20px 0;
+
 }
 
 .status-button {
-    padding: 7px 14px;
-    border: 1px solid #c8c8c8;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: #555;
-    font-size: 14px;
+
+    width: 150px;
+
+    padding: 10px 0;
+
+    border: 2px solid #d9d9d9;
+
+    border-radius: 8px;
+
+    background: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
     cursor: pointer;
+
+    transition: all .25s ease;
+
 }
 
 .status-button:hover {
-    background-color: #e5e5e5;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+
+}
+
+.cancel-button:hover {
+
+    background: #ffd9d9;
+    border-color: #d9534f;
+
+}
+
+.reschedule-button:hover {
+
+    background: #dff5ff;
+    border-color: #5bc0de;
+
 }
 
 /* =========================
