@@ -479,6 +479,21 @@ body > h2 {
 }
 
 /* =========================
+   ADMIN TIMESTAMP
+   ========================= */
+.submitted-time {
+
+    margin-top: 18px;
+
+    color: #666;
+
+    font-size: 14px;
+
+    text-align: center;
+
+}
+
+/* =========================
    STAFF LOGIN MODAL
    ========================= */
 
