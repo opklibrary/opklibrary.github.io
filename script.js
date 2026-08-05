@@ -25,50 +25,53 @@ function formatDate(dateString) {
 }
 
 
-// Load appointments
 async function loadAppointments() {
 
     // Get today's date in YYYY-MM-DD format
-const today = new Date().toISOString().split("T")[0];
-    
-  const { data, error } = await client
-    .from("appointments")
-    .select("*")
-    .eq("booked", false)
-    .order("date")
-    .order("time");
-    
-   if (error) {
+    const today = new Date().toISOString().split("T")[0];
+
+    const { data, error } = await client
+        .from("appointments")
+        .select("*")
+        .eq("booked", false)
+        .order("date")
+        .order("time");
+
+    if (error) {
         console.error(error);
         return;
     }
-    
+
+
     // Remove past appointments and already booked times
-const now = new Date();
+    const now = new Date();
 
-const availableAppointments = data.filter(slot => {
+    const availableAppointments = data.filter(slot => {
 
-    // Split "12:00 AM - 1:00 AM" and only use the start time
-    const startTime = slot.time.split(" - ")[0];
+        // Split "12:00 AM - 1:00 AM" and only use the start time
+        const startTime = slot.time.split(" - ")[0];
 
-    const appointmentDateTime = new Date(
-        `${slot.date} ${startTime}`
-    );
+        const appointmentDateTime = new Date(
+            `${slot.date} ${startTime}`
+        );
 
-    console.log({
-        date: slot.date,
-        time: slot.time,
-        appointmentDateTime,
-        now
+        console.log({
+            date: slot.date,
+            time: slot.time,
+            appointmentDateTime,
+            now
+        });
+
+        return appointmentDateTime > now && slot.booked === false;
+
     });
 
-    return appointmentDateTime > now && slot.booked === false;
 
-});
     const container = document.getElementById("dates");
     container.innerHTML = "";
 
-       // =========================
+
+    // =========================
     // GROUP APPOINTMENTS BY MONTH
     // =========================
 
@@ -76,55 +79,54 @@ const availableAppointments = data.filter(slot => {
 
     availableAppointments.forEach(slot => {
 
-        const date = new Date(slot.date + "T00:00:00");
+        const dateObject = new Date(slot.date + "T00:00:00");
 
-        const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
+        const monthKey = dateObject.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
+        });
 
         if (!groupedMonths[monthKey]) {
-            groupedMonths[monthKey] = {
-                date: date,
-                appointments: {}
-            };
+            groupedMonths[monthKey] = {};
         }
 
-        if (!groupedMonths[monthKey].appointments[slot.date]) {
-            groupedMonths[monthKey].appointments[slot.date] = [];
+        if (!groupedMonths[monthKey][slot.date]) {
+            groupedMonths[monthKey][slot.date] = [];
         }
 
-        groupedMonths[monthKey].appointments[slot.date].push(slot);
+        groupedMonths[monthKey][slot.date].push(slot);
 
     });
 
 
     // =========================
-    // CREATE MONTH SECTIONS
+    // CREATE EACH MONTH
     // =========================
 
-    Object.values(groupedMonths).forEach(month => {
+    Object.keys(groupedMonths).forEach(month => {
 
-        const monthSection = document.createElement("section");
+        const monthSection = document.createElement("div");
         monthSection.className = "month-section";
 
 
         // Month heading
         const monthHeading = document.createElement("h2");
         monthHeading.className = "month-heading";
-
-        monthHeading.textContent = month.date.toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric"
-        });
+        monthHeading.textContent = month;
 
         monthSection.appendChild(monthHeading);
 
 
-        // Calendar grid for this month
+        // Calendar grid
         const monthGrid = document.createElement("div");
         monthGrid.className = "month-grid";
 
 
-        // Create each date card
-        Object.keys(month.appointments).forEach(date => {
+        // =========================
+        // CREATE EACH DATE
+        // =========================
+
+        Object.keys(groupedMonths[month]).forEach(date => {
 
             const daySection = document.createElement("div");
             daySection.className = "day-section";
@@ -133,29 +135,23 @@ const availableAppointments = data.filter(slot => {
             // Date heading
             const dateObject = new Date(date + "T00:00:00");
 
-            const dayHeading = document.createElement("h3");
-            dayHeading.className = "day-heading";
+            const heading = document.createElement("h3");
+            heading.className = "day-heading";
 
-            dayHeading.innerHTML = `
-                <span class="day-name">
-                    ${dateObject.toLocaleDateString("en-US", {
-                        weekday: "short"
-                    })}
-                </span>
+            heading.textContent = dateObject.toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "long",
+                day: "numeric"
+            });
 
-                <span class="day-number">
-                    ${dateObject.toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric"
-                    })}
-                </span>
-            `;
-
-            daySection.appendChild(dayHeading);
+            daySection.appendChild(heading);
 
 
-            // Appointment times
-            month.appointments[date].forEach(slot => {
+            // =========================
+            // ADD APPOINTMENT TIMES
+            // =========================
+
+            groupedMonths[month][date].forEach(slot => {
 
                 const option = document.createElement("label");
                 option.className = "appointment-option";
@@ -204,6 +200,8 @@ const availableAppointments = data.filter(slot => {
         container.appendChild(monthSection);
 
     });
+
+}
 
 // Submit appointment
 async function submitAppointment() {
