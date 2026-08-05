@@ -556,6 +556,36 @@ body > h2 {
 }
 
 /* =========================
+   ADMIN APPOINTMENT SPACING
+   ========================= */
+
+.appointment-card h2 {
+    margin: 0 0 5px 0;
+}
+
+.appointment-card h3 {
+    margin: 0 0 15px 0;
+}
+
+.appointment-card p {
+    margin: 6px 0;
+    line-height: 1.4;
+}
+
+.appointment-card hr {
+    margin: 15px 0;
+}
+
+.appointment-card ul {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.appointment-card li {
+    margin: 3px 0;
+}
+
+/* =========================
    THANK YOU PAGE
    ========================= */
 .thank-you-container {
