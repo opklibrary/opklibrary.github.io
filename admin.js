@@ -203,7 +203,7 @@ function displayAppointments(data) {
                 <div class="appointment-status">
                 
                     <button class="status-button cancel-button">
-                        Cancelle
+                        Cancel
                     </button>
                 
                     <button class="status-button reschedule-button">
