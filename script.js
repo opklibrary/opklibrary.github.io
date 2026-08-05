@@ -68,68 +68,142 @@ const availableAppointments = data.filter(slot => {
     const container = document.getElementById("dates");
     container.innerHTML = "";
 
-    // Group appointments by date
-    const groupedDates = {};
+       // =========================
+    // GROUP APPOINTMENTS BY MONTH
+    // =========================
 
- availableAppointments.forEach(slot => {
+    const groupedMonths = {};
 
-        if (!groupedDates[slot.date]) {
-            groupedDates[slot.date] = [];
+    availableAppointments.forEach(slot => {
+
+        const date = new Date(slot.date + "T00:00:00");
+
+        const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
+
+        if (!groupedMonths[monthKey]) {
+            groupedMonths[monthKey] = {
+                date: date,
+                appointments: {}
+            };
         }
 
-        groupedDates[slot.date].push(slot);
+        if (!groupedMonths[monthKey].appointments[slot.date]) {
+            groupedMonths[monthKey].appointments[slot.date] = [];
+        }
+
+        groupedMonths[monthKey].appointments[slot.date].push(slot);
 
     });
 
 
-    // Create each day's section
-    Object.keys(groupedDates).forEach(date => {
+    // =========================
+    // CREATE MONTH SECTIONS
+    // =========================
 
-        const daySection = document.createElement("div");
-        daySection.className = "day-section";
+    Object.values(groupedMonths).forEach(month => {
 
-        const heading = document.createElement("h3");
-        heading.textContent = formatDate(date);
-
-        daySection.appendChild(heading);
+        const monthSection = document.createElement("section");
+        monthSection.className = "month-section";
 
 
-        groupedDates[date].forEach(slot => {
+        // Month heading
+        const monthHeading = document.createElement("h2");
+        monthHeading.className = "month-heading";
 
-            const option = document.createElement("label");
-            option.className = "appointment-option";
+        monthHeading.textContent = month.date.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
+        });
 
-            const radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = "appointment";
-            radio.value = slot.id;
+        monthSection.appendChild(monthHeading);
 
-            const labelText = document.createElement("span");
-            labelText.textContent = slot.time;
+
+        // Calendar grid for this month
+        const monthGrid = document.createElement("div");
+        monthGrid.className = "month-grid";
+
+
+        // Create each date card
+        Object.keys(month.appointments).forEach(date => {
+
+            const daySection = document.createElement("div");
+            daySection.className = "day-section";
+
+
+            // Date heading
+            const dateObject = new Date(date + "T00:00:00");
+
+            const dayHeading = document.createElement("h3");
+            dayHeading.className = "day-heading";
+
+            dayHeading.innerHTML = `
+                <span class="day-name">
+                    ${dateObject.toLocaleDateString("en-US", {
+                        weekday: "short"
+                    })}
+                </span>
+
+                <span class="day-number">
+                    ${dateObject.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric"
+                    })}
+                </span>
+            `;
+
+            daySection.appendChild(dayHeading);
+
+
+            // Appointment times
+            month.appointments[date].forEach(slot => {
+
+                const option = document.createElement("label");
+                option.className = "appointment-option";
+
+
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "appointment";
+                radio.value = slot.id;
+
+
+                const labelText = document.createElement("span");
+                labelText.textContent = slot.time;
+
 
                 radio.addEventListener("change", () => {
 
                     if (radio.checked) {
+
                         selectedAppointment = slot.id;
+
                         console.log("Selected:", selectedAppointment);
+
                         checkFormCompletion();
+
                     }
 
                 });
 
-            option.appendChild(radio);
-            option.appendChild(labelText);
 
-            daySection.appendChild(option);
+                option.appendChild(radio);
+                option.appendChild(labelText);
+
+                daySection.appendChild(option);
+
+            });
+
+
+            monthGrid.appendChild(daySection);
 
         });
 
-        container.appendChild(daySection);
+
+        monthSection.appendChild(monthGrid);
+
+        container.appendChild(monthSection);
 
     });
-
-}
-
 
 // Submit appointment
 async function submitAppointment() {
