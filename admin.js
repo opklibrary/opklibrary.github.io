@@ -73,25 +73,53 @@ const container = document.getElementById("appointmentList");
 
 container.innerHTML = "";
 
+let currentMonth = "";
+
 data.forEach((appointment) => {
 
     console.log("FULL APPOINTMENT:", appointment);
     console.log("USER INFO:", appointment.user_info);
-console.log("WHY APPOINTMENT:", appointment.why_appointment);
+    console.log("WHY APPOINTMENT:", appointment.why_appointment);
 
     const user = appointment.user_info?.[0];
     const reason = appointment.why_appointment?.[0];
+
+    const appointmentDate = new Date(
+        appointment.date + "T00:00:00"
+    );
+
+    // Get the month and year
+    const monthName = appointmentDate.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric"
+    });
+
+    // Add a heading when the month changes
+    if (monthName !== currentMonth) {
+
+        const monthHeading = document.createElement("h2");
+        monthHeading.className = "month-heading";
+        monthHeading.textContent = monthName;
+
+        container.appendChild(monthHeading);
+
+        currentMonth = monthName;
+    }
+
+    // Format the appointment date
+    const formattedDate = appointmentDate.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
 
     const card = document.createElement("div");
     card.className = "appointment-card";
 
     card.innerHTML = `
-        <h2>${new Date(appointment.date + "T00:00:00").toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric"
-})}</h2>
+        <h2>${formattedDate}</h2>
+
         <h3>${appointment.time}</h3>
 
         <p><strong>Name:</strong> ${user?.name || "N/A"}</p>
@@ -103,6 +131,7 @@ console.log("WHY APPOINTMENT:", appointment.why_appointment);
         <hr>
 
         <p><strong>Why appointment:</strong></p>
+
         <ul>
             ${reason?.learn ? "<li>Learn something new</li>" : ""}
             ${reason?.need ? "<li>Need assistance with something</li>" : ""}
@@ -111,8 +140,9 @@ console.log("WHY APPOINTMENT:", appointment.why_appointment);
             ${reason?.other ? "<li>Other</li>" : ""}
         </ul>
 
-        <p><strong>Description:</strong><br>
-        ${reason?.describe_problem || "No description provided"}
+        <p>
+            <strong>Description:</strong><br>
+            ${reason?.describe_problem || "No description provided"}
         </p>
     `;
 
