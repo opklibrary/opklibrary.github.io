@@ -31,12 +31,13 @@ async function loadAppointments() {
     // Get today's date in YYYY-MM-DD format
 const today = new Date().toISOString().split("T")[0];
     
-  const { data: updatedAppointment, error } = await client
+  const { data, error } = await client
     .from("appointments")
-    .update({ booked: true })
-    .eq("id", selectedAppointment)
-    .select();
-
+    .select("*")
+    .eq("booked", false)
+    .order("date")
+    .order("time");
+    
    if (error) {
         console.error(error);
         return;
