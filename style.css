@@ -584,6 +584,19 @@ body > h2 {
 .appointment-card li {
     margin: 3px 0;
 }
+/* ADMIN SPACING TEST */
+
+#appointmentList {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#appointmentList .appointment-card {
+    display: block !important;
+    margin: 0 0 20px 0 !important;
+    padding: 20px !important;
+}
 
 /* =========================
    THANK YOU PAGE
