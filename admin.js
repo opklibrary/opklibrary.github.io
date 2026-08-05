@@ -19,6 +19,16 @@ const client = window.supabase.createClient(
 // Stores every appointment loaded from Supabase
 let allAppointments = [];
 
+// Remove punctuation and make text lowercase
+function normalize(text) {
+
+    return (text || "")
+        .toString()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+
+}
+
 // =========================
 // CHECK IF STAFF IS LOGGED IN
 // =========================
@@ -328,7 +338,7 @@ const searchBox = document.getElementById("searchAppointments");
 
 searchBox.addEventListener("input", () => {
 
-    const search = searchBox.value.toLowerCase().trim();
+    const search = normalize(searchBox.value);
 
     const filtered = allAppointments.filter((appointment) => {
 
@@ -336,11 +346,22 @@ searchBox.addEventListener("input", () => {
 
         if (!user) return false;
 
-        return (
-            user.name?.toLowerCase().includes(search) ||
-            user.phone_number?.toLowerCase().includes(search) ||
-            user.email?.toLowerCase().includes(search)
-        );
+       const searchableText = [
+
+            user?.name,
+        
+            user?.phone_number,
+        
+            user?.email,
+        
+            user?.what_tech,
+        
+            reason?.describe_problem
+        
+        ]
+        .join(" ");
+
+        return normalize(searchableText).includes(search);
 
     });
 
