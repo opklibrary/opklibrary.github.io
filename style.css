@@ -887,6 +887,12 @@ body > h2 {
 
     box-sizing: border-box;
 }
+
+.confirmed {
+    border-color: #28a745;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.35);
+}
+
 /* =========================
    CLEAN UP APPOINTMENT DETAILS
    ========================= */
