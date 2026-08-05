@@ -37,11 +37,10 @@ const today = new Date().toISOString().split("T")[0];
     .eq("id", selectedAppointment)
     .select();
 
-if (error) {
-    console.error("BOOKED UPDATE ERROR:", error);
-    alert("Unable to mark appointment as booked: " + error.message);
-    return;
-}
+   if (error) {
+        console.error(error);
+        return;
+    }
     
     // Remove past appointments and already booked times
 const now = new Date();
