@@ -165,6 +165,13 @@ data.forEach((appointment) => {
             <strong>Description:</strong><br>
             ${reason?.describe_problem || "No description provided"}
         </p>
+
+        <hr>
+
+        <p class="submitted-time">
+            <strong>Submitted:</strong><br>
+            ${submittedText}
+        </p>
     `;
 
     container.appendChild(card);
