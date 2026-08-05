@@ -223,6 +223,12 @@ async function submitAppointment() {
     const phone = document.getElementById("phone").value.trim();
     const whatTech = document.getElementById("whatTech").value.trim();
 
+    const staffInitials = document
+    .getElementById("staffInitials")
+    .value
+    .trim()
+    .toUpperCase();
+
       // Get reason for appointment
     const learn = document.getElementById("learn").checked;
     const need = document.getElementById("need").checked;
@@ -241,9 +247,12 @@ console.log("Selected appointment:", selectedAppointment);
 console.log("Type:", typeof selectedAppointment);
     
     const { error } = await client
-        .from("appointments")
-        .update({ booked: true })
-        .eq("id", selectedAppointment);
+    .from("appointments")
+    .update({
+        booked: true,
+        staff_initials: staffInitials || null
+    })
+    .eq("id", selectedAppointment);
 
     if (error) {
         console.error(error);
