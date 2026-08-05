@@ -198,11 +198,19 @@ function displayAppointments(data) {
                 <p>
                     <strong>Description:</strong><br>
                     ${reason?.describe_problem || "No description provided"}
-                    <div class="appointment-status">
-                    <button class="status-button">Cancelled</button>
-                    <button class="status-button">Rescheduled</button>
-            </div>
                 </p>
+                
+                <div class="appointment-status">
+                
+                    <button class="status-button cancel-button">
+                        Cancelle
+                    </button>
+                
+                    <button class="status-button reschedule-button">
+                        Reschedule
+                    </button>
+                
+                </div>
         
                 <hr>
         
