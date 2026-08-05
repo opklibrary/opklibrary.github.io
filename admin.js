@@ -301,6 +301,10 @@ function displayAppointments(data) {
                 <p>
                     <strong>Description:</strong><br>
                     ${reason?.describe_problem || "No description provided"}
+                    <div class="appointment-status">
+                    <button class="status-button">Cancelled</button>
+                    <button class="status-button">Rescheduled</button>
+            </div>
                 </p>
         
                 <hr>
