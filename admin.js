@@ -201,13 +201,17 @@ function displayAppointments(data) {
                 </p>
                 
                 <div class="appointment-status">
-                
-                    <button class="status-button cancel-button">
-                        Cancel
+
+                    <button class="status-button confirm-button">
+                        Confirm
                     </button>
                 
                     <button class="status-button reschedule-button">
                         Reschedule
+                    </button>
+
+                    <button class="status-button cancel-button">
+                        Cancel
                     </button>
                 
                 </div>
