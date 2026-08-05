@@ -49,7 +49,8 @@ async function loadAppointments() {
                 name,
                 phone_number,
                 email,
-                what_tech
+                what_tech,
+                submitted_at
             ),
             why_appointment (
                 learn,
