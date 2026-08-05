@@ -85,6 +85,26 @@ data.forEach((appointment) => {
     const user = appointment.user_info?.[0];
     const reason = appointment.why_appointment?.[0];
 
+    //makes timestamp into readable values instead of raw values
+    let submittedText = "Unknown";
+
+    if (user?.submitted_at) {
+    
+        const submittedDate = new Date(user.submitted_at);
+    
+        submittedText = submittedDate.toLocaleString("en-US", {
+    
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+    
+        });
+    
+    }
+
     const appointmentDate = new Date(
         appointment.date + "T00:00:00"
     );
