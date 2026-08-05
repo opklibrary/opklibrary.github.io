@@ -642,17 +642,13 @@ body > h2 {
    ========================= */
 
 .admin-view-buttons {
-
     display: flex;
-
     justify-content: center;
-
     gap: 20px;
-
     flex-wrap: wrap;
 
+    margin-bottom: 5px;
 }
-
 
 .admin-view-buttons button {
 
@@ -704,12 +700,10 @@ body > h2 {
    ========================= */
 
 .admin-view-title {
-
-    margin: 0;
-
+    margin: 30px 0 10px 0;
     font-size: 28px;
-
     text-align: center;
+}
 
 }
 /* =========================
