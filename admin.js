@@ -100,7 +100,7 @@ console.log("WHY APPOINTMENT:", appointment.why_appointment);
         <p><strong>Why appointment:</strong></p>
         <ul>
             ${reason?.learn ? "<li>Learn something new</li>" : ""}
-            ${reason?.need ? "<li>Need assistance</li>" : ""}
+            ${reason?.need ? "<li>Need assistance with something</li>" : ""}
             ${reason?.new ? "<li>New device/setup</li>" : ""}
             ${reason?.help ? "<li>General help</li>" : ""}
             ${reason?.other ? "<li>Other</li>" : ""}
