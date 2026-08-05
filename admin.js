@@ -86,7 +86,12 @@ console.log("WHY APPOINTMENT:", appointment.why_appointment);
     card.className = "appointment-card";
 
     card.innerHTML = `
-        <h2>${appointment.date}</h2>
+        <h2>${new Date(appointment.date + "T00:00:00").toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+})}</h2>
         <h3>${appointment.time}</h3>
 
         <p><strong>Name:</strong> ${user?.name || "N/A"}</p>
