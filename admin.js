@@ -164,8 +164,6 @@ data.forEach((appointment) => {
 
         <p><strong>Tech Help:</strong> ${user?.what_tech || "N/A"}</p>
 
-        <p><strong>Staff Initials:</strong> ${appointment.staff_initials || "—"}</p>
-
         <hr>
 
         <p><strong>Why appointment:</strong></p>
@@ -189,6 +187,10 @@ data.forEach((appointment) => {
             <strong>Submitted:</strong><br>
             ${submittedText}
         </p>
+        
+        <p class="staff-initials-display">
+    <strong>Staff Initials:</strong> ${appointment.staff_initials || "—"}
+</p>
     `;
 
     container.appendChild(card);
