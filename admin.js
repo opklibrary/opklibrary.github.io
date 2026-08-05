@@ -199,6 +199,10 @@ function displayAppointments(data) {
                     <strong>Description:</strong><br>
                     ${reason?.describe_problem || "No description provided"}
                 </p>
+
+                <p class="staff-initials-display">
+                    <strong>Staff Initials:</strong> ${appointment.staff_initials || "—"}
+                </p>
                 
                 <div class="appointment-status">
 
