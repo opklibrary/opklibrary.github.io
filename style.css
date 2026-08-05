@@ -854,6 +854,44 @@ body > h2 {
 }
 
 /* =========================
+   STAFF INITIALS
+   ========================= */
+
+.staff-initials-box {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 15px 20px;
+
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.staff-initials-box h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+}
+
+.staff-initials-box input {
+    width: 100px;
+    height: 32px;
+    padding: 5px 8px;
+
+    font-size: 16px;
+    text-transform: uppercase;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.staff-initials-box p {
+    margin: 5px 0 0 0;
+    font-size: 12px;
+    color: #777;
+}
+
+/* =========================
    THANK YOU PAGE
    ========================= */
 .thank-you-container {
