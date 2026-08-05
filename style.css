@@ -134,6 +134,57 @@ body > h2 {
     margin: 0 auto;
 }
 
+/* =========================
+   MONTH-SPECIFIC DATE COLORS
+   ========================= */
+
+.day-heading.august {
+    background-color: #e8f4e5;
+}
+
+.day-heading.september {
+    background-color: #e8eef7;
+}
+
+.day-heading.october {
+    background-color: #f7eee3;
+}
+
+.day-heading.november {
+    background-color: #eee7f5;
+}
+
+.day-heading.december {
+    background-color: #f5e8e8;
+}
+
+.day-heading.january {
+    background-color: #e8eef5;
+}
+
+.day-heading.february {
+    background-color: #f3e8f0;
+}
+
+.day-heading.march {
+    background-color: #e8f3ec;
+}
+
+.day-heading.april {
+    background-color: #f3f0e5;
+}
+
+.day-heading.may {
+    background-color: #e8f3e8;
+}
+
+.day-heading.june {
+    background-color: #e8f0f5;
+}
+
+.day-heading.july {
+    background-color: #f5eee5;
+}
 
 /* =========================
    INDIVIDUAL DAY CARD
