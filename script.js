@@ -313,7 +313,7 @@ if (appointmentFetchError) {
     
     // Send email notification
     const { data: emailData, error: emailError } = await client.functions.invoke(
-        "send-appointment-email",
+        "clever-endpoint",
         {
             body: {
                 date: appointmentData.date,
