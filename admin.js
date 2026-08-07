@@ -108,6 +108,27 @@ function displayAppointments(data) {
     const container = document.getElementById("appointmentList");
 
     container.innerHTML = "";
+    
+ // Current date and time
+    const now = new Date();
+
+    // Separate appointments into upcoming and past
+    const upcomingAppointments = [];
+    const pastAppointments = [];
+
+    data.forEach((appointment) => {
+
+        const appointmentDateTime = new Date(
+            appointment.date + "T" + appointment.time
+        );
+
+        if (appointmentDateTime > now) {
+            upcomingAppointments.push(appointment);
+        } else {
+            pastAppointments.push(appointment);
+        }
+
+    });
 
     let currentMonth = "";
         
