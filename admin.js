@@ -317,22 +317,24 @@ const appointmentDateTime = new Date(
                 ${appointment.staff_initials || "—"}
             </p>
 
-            <div class="appointment-status">
+          ${currentView === "upcoming" ? `
+    <div class="appointment-status">
 
-                <button class="status-button confirm-button">
-                    Confirm
-                </button>
+        <button class="status-button confirm-button">
+            Confirm
+        </button>
 
-                <button class="status-button reschedule-button">
-                    Reschedule
-                </button>
+        <button class="status-button reschedule-button">
+            Reschedule
+        </button>
 
-                <button class="status-button cancel-button">
-                    Cancel
-                </button>
+        <button class="status-button cancel-button">
+            Cancel
+        </button>
 
-            </div>
-
+    </div>
+` : ""}
+       
             <hr>
 
             <p class="submitted-time">
