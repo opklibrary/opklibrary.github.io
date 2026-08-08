@@ -134,14 +134,18 @@ data.forEach((appointment) => {
 });
 
 // Decide which appointments should be displayed
-let appointmentsToDisplay;
+let appointmentsToDisplay = [];
 
 if (currentView === "past") {
-    appointmentsToDisplay = pastAppointments;
-} else {
-    appointmentsToDisplay = upcomingAppointments;
-}
 
+    appointmentsToDisplay = pastAppointments;
+
+} else if (currentView === "upcoming") {
+
+    appointmentsToDisplay = upcomingAppointments;
+
+}
+    
     // Keep appointments sorted by date and time
     appointmentsToDisplay.sort((a, b) => {
 
