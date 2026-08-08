@@ -115,32 +115,32 @@ function displayAppointments(data) {
     // Current date and time
     const now = new Date();
 
-    // Separate appointments into upcoming and past
-    const upcomingAppointments = [];
-    const pastAppointments = [];
+   // Separate appointments into upcoming and past
+const upcomingAppointments = [];
+const pastAppointments = [];
 
-    appointmentsToDisplay.forEach((appointment) => {
+data.forEach((appointment) => {
 
-        const appointmentDateTime = new Date(
-            appointment.date + "T" + appointment.time
-        );
+    const appointmentDateTime = new Date(
+        appointment.date + "T" + appointment.time
+    );
 
-        if (appointmentDateTime > now) {
-            upcomingAppointments.push(appointment);
-        } else {
-            pastAppointments.push(appointment);
-        }
-
-    });
-
-    // Decide which appointments should be displayed
-    let appointmentsToDisplay;
-
-    if (currentView === "past") {
-        appointmentsToDisplay = pastAppointments;
+    if (appointmentDateTime > now) {
+        upcomingAppointments.push(appointment);
     } else {
-        appointmentsToDisplay = upcomingAppointments;
+        pastAppointments.push(appointment);
     }
+
+});
+
+// Decide which appointments should be displayed
+let appointmentsToDisplay;
+
+if (currentView === "past") {
+    appointmentsToDisplay = pastAppointments;
+} else {
+    appointmentsToDisplay = upcomingAppointments;
+}
 
     // Keep appointments sorted by date and time
     appointmentsToDisplay.sort((a, b) => {
