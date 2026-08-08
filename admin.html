@@ -136,7 +136,43 @@
 
 
     </main>
+    
+<!-- =========================
+     RESCHEDULE MODAL
+========================= -->
 
+<div id="rescheduleModal" class="reschedule-modal">
+
+    <div class="reschedule-box">
+
+        <h2>Reschedule Appointment</h2>
+
+        <p id="rescheduleCurrentAppointment"></p>
+
+        <label for="rescheduleSlot">
+            Choose a new appointment:
+        </label>
+
+        <select id="rescheduleSlot">
+            <option value="">Select an available appointment</option>
+        </select>
+
+        <div class="reschedule-actions">
+
+            <button id="confirmReschedule">
+                Reschedule
+            </button>
+
+            <button id="cancelReschedule">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+    
 
     <!-- =========================
          JAVASCRIPT
