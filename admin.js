@@ -19,6 +19,9 @@ const client = window.supabase.createClient(
 // Stores every appointment loaded from Supabase
 let allAppointments = [];
 
+// Current appointment view
+let currentView = "upcoming";
+
 // Remove punctuation and make text lowercase
 function normalize(text) {
 
@@ -108,8 +111,8 @@ function displayAppointments(data) {
     const container = document.getElementById("appointmentList");
 
     container.innerHTML = "";
-    
- // Current date and time
+
+    // Current date and time
     const now = new Date();
 
     // Separate appointments into upcoming and past
@@ -130,138 +133,174 @@ function displayAppointments(data) {
 
     });
 
+    // Decide which appointments should be displayed
+    let appointmentsToDisplay;
+
+    if (currentView === "past") {
+        appointmentsToDisplay = pastAppointments;
+    } else {
+        appointmentsToDisplay = upcomingAppointments;
+    }
+
+    // Keep appointments sorted by date and time
+    appointmentsToDisplay.sort((a, b) => {
+
+        const dateA = new Date(
+            a.date + "T" + a.time
+        );
+
+        const dateB = new Date(
+            b.date + "T" + b.time
+        );
+
+        return dateA - dateB;
+
+    });
+
     let currentMonth = "";
-        
-        data.forEach((appointment) => {
-        
-            console.log("FULL APPOINTMENT:", appointment);
-            console.log("USER INFO:", appointment.user_info);
-            console.log("WHY APPOINTMENT:", appointment.why_appointment);
-        
-            const user = appointment.user_info?.[0];
-            const reason = appointment.why_appointment?.[0];
-        
-            //makes timestamp into readable values instead of raw values
-            let submittedText = "Unknown";
-        
-            if (user?.submitted_at) {
-            
-                const submittedDate = new Date(user.submitted_at);
-            
-                submittedText = submittedDate.toLocaleString("en-US", {
-            
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit"
-            
-                });
-            
-            }
-        
-            const appointmentDate = new Date(
-                appointment.date + "T00:00:00"
-            );
-        
-            // Get the month and year
-            const monthName = appointmentDate.toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric"
-            });
-        
-            // Add a heading when the month changes
-            if (monthName !== currentMonth) {
-        
-                const monthHeading = document.createElement("h2");
-                monthHeading.className = "month-heading";
-                monthHeading.textContent = monthName;
-        
-                container.appendChild(monthHeading);
-        
-                currentMonth = monthName;
-            }
-        
-            // Format the appointment date
-            const formattedDate = appointmentDate.toLocaleDateString("en-US", {
+
+    appointmentsToDisplay.forEach((appointment) {
+
+        console.log("FULL APPOINTMENT:", appointment);
+        console.log("USER INFO:", appointment.user_info);
+        console.log("WHY APPOINTMENT:", appointment.why_appointment);
+
+        const user = appointment.user_info?.[0];
+        const reason = appointment.why_appointment?.[0];
+
+        // makes timestamp into readable values instead of raw values
+        let submittedText = "Unknown";
+
+        if (user?.submitted_at) {
+
+            const submittedDate = new Date(user.submitted_at);
+
+            submittedText = submittedDate.toLocaleString("en-US", {
+
                 weekday: "long",
                 month: "long",
                 day: "numeric",
-                year: "numeric"
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+
             });
-        
-            const card = document.createElement("div");
-            card.className = "appointment-card";
-        
-            card.innerHTML = `
-                <h2>${formattedDate}</h2>
-        
-                <h3>${appointment.time}</h3>
-        
-                <p><strong>Name:</strong> ${user?.name || "N/A"}</p>
-                <p><strong>Phone:</strong> ${user?.phone_number || "N/A"}</p>
-                <p><strong>Email:</strong> ${user?.email || "N/A"}</p>
-        
-                <p><strong>Tech Help:</strong> ${user?.what_tech || "N/A"}</p>
-        
-                <hr>
-        
-                <p><strong>Why appointment:</strong></p>
-        
-                <ul>
-                    ${reason?.learn ? "<li>Learn something new</li>" : ""}
-                    ${reason?.need ? "<li>Need assistance with something</li>" : ""}
-                    ${reason?.new ? "<li>New device/setup</li>" : ""}
-                    ${reason?.help ? "<li>General help</li>" : ""}
-                    ${reason?.other ? "<li>Other</li>" : ""}
-                </ul>
-        
-                <p>
-                    <strong>Description:</strong><br>
-                    ${reason?.describe_problem || "No description provided"}
-                </p>
 
-                <p class="staff-initials-display">
-                    <strong>Staff Initials:</strong> ${appointment.staff_initials || "—"}
-                </p>
-                
-                <div class="appointment-status">
+        }
 
-                    <button class="status-button confirm-button">
-                        Confirm
-                    </button>
-                
-                    <button class="status-button reschedule-button">
-                        Reschedule
-                    </button>
+        const appointmentDate = new Date(
+            appointment.date + "T00:00:00"
+        );
 
-                    <button class="status-button cancel-button">
-                        Cancel
-                    </button>
-                
-                </div>
-        
-                <hr>
-        
-                <p class="submitted-time">
-                    <strong>Submitted:</strong><br>
-                    ${submittedText}
-                </p>
-            `;
-
-            const confirmButton = card.querySelector(".confirm-button");
-
-            confirmButton.addEventListener("click", () => {
-                const isConfirmed = card.classList.toggle("confirmed");
-            
-                confirmButton.classList.toggle("confirmed-button", isConfirmed);
-                confirmButton.textContent = isConfirmed ? "Confirmed" : "Confirm";
-            });
-            
-            container.appendChild(card);
-        
+        // Get the month and year
+        const monthName = appointmentDate.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
         });
+
+        // Add a heading when the month changes
+        if (monthName !== currentMonth) {
+
+            const monthHeading = document.createElement("h2");
+            monthHeading.className = "month-heading";
+            monthHeading.textContent = monthName;
+
+            container.appendChild(monthHeading);
+
+            currentMonth = monthName;
+        }
+
+        // Format the appointment date
+        const formattedDate = appointmentDate.toLocaleDateString("en-US", {
+
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+
+        });
+
+        const card = document.createElement("div");
+        card.className = "appointment-card";
+
+        card.innerHTML = `
+            <h2>${formattedDate}</h2>
+
+            <h3>${appointment.time}</h3>
+
+            <p><strong>Name:</strong> ${user?.name || "N/A"}</p>
+            <p><strong>Phone:</strong> ${user?.phone_number || "N/A"}</p>
+            <p><strong>Email:</strong> ${user?.email || "N/A"}</p>
+
+            <p><strong>Tech Help:</strong> ${user?.what_tech || "N/A"}</p>
+
+            <hr>
+
+            <p><strong>Why appointment:</strong></p>
+
+            <ul>
+                ${reason?.learn ? "<li>Learn something new</li>" : ""}
+                ${reason?.need ? "<li>Need assistance with something</li>" : ""}
+                ${reason?.new ? "<li>New device/setup</li>" : ""}
+                ${reason?.help ? "<li>General help</li>" : ""}
+                ${reason?.other ? "<li>Other</li>" : ""}
+            </ul>
+
+            <p>
+                <strong>Description:</strong><br>
+                ${reason?.describe_problem || "No description provided"}
+            </p>
+
+            <p class="staff-initials-display">
+                <strong>Staff Initials:</strong>
+                ${appointment.staff_initials || "—"}
+            </p>
+
+            <div class="appointment-status">
+
+                <button class="status-button confirm-button">
+                    Confirm
+                </button>
+
+                <button class="status-button reschedule-button">
+                    Reschedule
+                </button>
+
+                <button class="status-button cancel-button">
+                    Cancel
+                </button>
+
+            </div>
+
+            <hr>
+
+            <p class="submitted-time">
+                <strong>Submitted:</strong><br>
+                ${submittedText}
+            </p>
+        `;
+
+        const confirmButton = card.querySelector(".confirm-button");
+
+        confirmButton.addEventListener("click", () => {
+
+            const isConfirmed =
+                card.classList.toggle("confirmed");
+
+            confirmButton.classList.toggle(
+                "confirmed-button",
+                isConfirmed
+            );
+
+            confirmButton.textContent =
+                isConfirmed ? "Confirmed" : "Confirm";
+
+        });
+
+        container.appendChild(card);
+
+    });
+
 }
 
 //make admin search work
