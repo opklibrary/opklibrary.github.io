@@ -114,10 +114,14 @@ function displayAppointments(data) {
 
         console.log("FULL APPOINTMENT:", appointment);
 
-        // Hide normal available appointment slots
-        // Canceled appointments are allowed through even though booked = false
-        if (appointment.booked !== true && appointment.cancelled !== true) {
-      return;
+        // =========================
+    // HIDE AVAILABLE APPOINTMENTS
+    // ========================
+    if (
+        appointment.booked !== true &&
+        appointment.cancelled !== true
+    ) {
+        return;
     }
         
         console.log("USER INFO:", appointment.user_info);
