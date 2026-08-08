@@ -159,8 +159,8 @@ function displayAppointments(data) {
 
     let currentMonth = "";
 
-    appointmentsToDisplay.forEach((appointment) {
-
+    appointmentsToDisplay.forEach((appointment) => {
+        
         console.log("FULL APPOINTMENT:", appointment);
         console.log("USER INFO:", appointment.user_info);
         console.log("WHY APPOINTMENT:", appointment.why_appointment);
