@@ -122,8 +122,6 @@ function displayAppointments(data) {
 // SEPARATE APPOINTMENTS
 // =========================
 
-const now = new Date();
-
 const upcomingAppointments = [];
 const pastAppointments = [];
 const canceledAppointments = [];
