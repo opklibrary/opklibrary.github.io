@@ -347,23 +347,27 @@ const appointmentDateTime = new Date(
         // CONFIRM BUTTON
         // =========================
 
-        const confirmButton =
-            card.querySelector(".confirm-button");
+  const confirmButton =
+    card.querySelector(".confirm-button");
 
-        confirmButton.addEventListener("click", () => {
+if (confirmButton) {
 
-            const isConfirmed =
-                card.classList.toggle("confirmed");
+    confirmButton.addEventListener("click", () => {
 
-            confirmButton.classList.toggle(
-                "confirmed-button",
-                isConfirmed
-            );
+        const isConfirmed =
+            card.classList.toggle("confirmed");
 
-            confirmButton.textContent =
-                isConfirmed ? "Confirmed" : "Confirm";
+        confirmButton.classList.toggle(
+            "confirmed-button",
+            isConfirmed
+        );
 
-        });
+        confirmButton.textContent =
+            isConfirmed ? "Confirmed" : "Confirm";
+
+    });
+
+}
 
         container.appendChild(card);
 
