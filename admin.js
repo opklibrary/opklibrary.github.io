@@ -338,16 +338,57 @@ searchBox.addEventListener("input", () => {
 
     displayAppointments(filtered);
 
-    // =========================
+ // =========================
 // ADMIN VIEW BUTTONS
 // =========================
 
+const showUpcomingButton = document.getElementById("showUpcoming");
 const showPastButton = document.getElementById("showPast");
+const showCanceledButton = document.getElementById("showCanceled");
+
 const adminViewTitle = document.getElementById("adminViewTitle");
+
+
+// Remove active styling from all buttons
+function clearActiveView() {
+
+    showUpcomingButton.classList.remove("active-view");
+    showPastButton.classList.remove("active-view");
+    showCanceledButton.classList.remove("active-view");
+
+}
+
+
+// =========================
+// UPCOMING
+// =========================
+
+showUpcomingButton.addEventListener("click", () => {
+
+    currentView = "upcoming";
+
+    clearActiveView();
+
+    showUpcomingButton.classList.add("active-view");
+
+    adminViewTitle.textContent = "Upcoming Appointments";
+
+    displayAppointments(allAppointments);
+
+});
+
+
+// =========================
+// PAST
+// =========================
 
 showPastButton.addEventListener("click", () => {
 
     currentView = "past";
+
+    clearActiveView();
+
+    showPastButton.classList.add("active-view");
 
     adminViewTitle.textContent = "Past Dates";
 
@@ -355,14 +396,22 @@ showPastButton.addEventListener("click", () => {
 
 });
 
-    adminViewTitle.addEventListener("click", () => {
 
-    currentView = "upcoming";
+// =========================
+// CANCELED
+// =========================
 
-    adminViewTitle.textContent = "Upcoming Appointments";
+showCanceledButton.addEventListener("click", () => {
 
-    displayAppointments(allAppointments);
+    currentView = "canceled";
 
+    clearActiveView();
+
+    showCanceledButton.classList.add("active-view");
+
+    adminViewTitle.textContent = "Canceled Appointments";
+
+    // Canceled appointment code will go here
 });
 
 // Run when admin page opens
