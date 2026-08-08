@@ -540,6 +540,69 @@ if (rescheduleButton) {
     });
 
 }
+        
+// =========================
+// CANCEL BUTTON
+// =========================
+
+const cancelButton =
+    card.querySelector(".cancel-button");
+
+if (cancelButton) {
+
+    cancelButton.addEventListener("click", async () => {
+
+        const confirmed = confirm(
+            "Are you sure you want to cancel this appointment?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        // =========================
+        // MARK APPOINTMENT CANCELED
+        // =========================
+
+        const { error } = await client
+            .from("appointments")
+            .update({
+                cancelled: true,
+                appointment_confirmed: false
+            })
+            .eq("id", appointment.id);
+
+        if (error) {
+
+            console.error(
+                "Error canceling appointment:",
+                error
+            );
+
+            alert(
+                "Unable to cancel the appointment."
+            );
+
+            return;
+        }
+
+        // Update local appointment data
+        appointment.cancelled = true;
+        appointment.appointment_confirmed = false;
+
+        // =========================
+        // RELOAD APPOINTMENTS
+        // =========================
+
+        await loadAppointments();
+
+        alert(
+            "Appointment canceled."
+        );
+
+    });
+
+}
 
         container.appendChild(card);
 
