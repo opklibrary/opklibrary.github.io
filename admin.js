@@ -59,6 +59,7 @@ async function loadAppointments() {
             time,
             booked,
             cancelled,
+            appointment_confirmed,
             staff_initials,
             user_info (
                 name,
@@ -352,18 +353,56 @@ const appointmentDateTime = new Date(
 
 if (confirmButton) {
 
-    confirmButton.addEventListener("click", () => {
+    // Show saved confirmation status
+    if (appointment.appointment_confirmed === true) {
 
-        const isConfirmed =
-            card.classList.toggle("confirmed");
+        card.classList.add("confirmed");
+
+        confirmButton.classList.add("confirmed-button");
+
+        confirmButton.textContent = "Confirmed";
+    }
+
+    confirmButton.addEventListener("click", async () => {
+
+        const newStatus =
+            !appointment.appointment_confirmed;
+
+        const { error } = await client
+            .from("appointments")
+            .update({
+                appointment_confirmed: newStatus
+            })
+            .eq("id", appointment.id);
+
+        if (error) {
+
+            console.error(
+                "Error updating confirmation:",
+                error
+            );
+
+            alert("Unable to save confirmation.");
+
+            return;
+        }
+
+        // Update local appointment data
+        appointment.appointment_confirmed = newStatus;
+
+        // Update the card visually
+        card.classList.toggle(
+            "confirmed",
+            newStatus
+        );
 
         confirmButton.classList.toggle(
             "confirmed-button",
-            isConfirmed
+            newStatus
         );
 
         confirmButton.textContent =
-            isConfirmed ? "Confirmed" : "Confirm";
+            newStatus ? "Confirmed" : "Confirm";
 
     });
 
