@@ -561,13 +561,14 @@ if (cancelButton) {
         }
 
         // =========================
-        // MARK APPOINTMENT CANCELED
+        // CANCEL APPOINTMENT
         // =========================
 
         const { error } = await client
             .from("appointments")
             .update({
                 cancelled: true,
+                booked: false,
                 appointment_confirmed: false
             })
             .eq("id", appointment.id);
@@ -588,6 +589,7 @@ if (cancelButton) {
 
         // Update local appointment data
         appointment.cancelled = true;
+        appointment.booked = false;
         appointment.appointment_confirmed = false;
 
         // =========================
