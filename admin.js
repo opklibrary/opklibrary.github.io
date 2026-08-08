@@ -407,11 +407,379 @@ if (confirmButton) {
     });
 
 }
+        // =========================
+// RESCHEDULE BUTTON
+// =========================
+
+const rescheduleButton =
+    card.querySelector(".reschedule-button");
+
+if (rescheduleButton) {
+
+    rescheduleButton.addEventListener("click", async () => {
+
+        const modal =
+            document.getElementById("rescheduleModal");
+
+        const currentAppointmentText =
+            document.getElementById(
+                "rescheduleCurrentAppointment"
+            );
+
+        const slotSelect =
+            document.getElementById("rescheduleSlot");
+
+        const currentDate =
+            new Date(
+                appointment.date + "T00:00:00"
+            ).toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+
+        currentAppointmentText.textContent =
+            `Currently scheduled for ${currentDate} at ${appointment.time}`;
+
+        // Clear old choices
+        slotSelect.innerHTML = `
+            <option value="">
+                Select an available appointment
+            </option>
+        `;
+
+        // Get currently available appointments
+        const { data: availableSlots, error } =
+            await client
+                .from("appointments")
+                .select("id, date, time")
+                .eq("booked", false)
+                .eq("cancelled", false)
+                .order("date")
+                .order("time");
+
+        if (error) {
+
+            console.error(
+                "Error loading available appointments:",
+                error
+            );
+
+            alert(
+                "Unable to load available appointments."
+            );
+
+            return;
+        }
+
+        const now = new Date();
+
+        // Only show future appointments
+        const futureSlots =
+            availableSlots.filter((slot) => {
+
+                const startTime =
+                    slot.time.split(" - ")[0];
+
+                const slotDateTime =
+                    new Date(
+                        `${slot.date} ${startTime}`
+                    );
+
+                return slotDateTime > now;
+
+            });
+
+        if (futureSlots.length === 0) {
+
+            alert(
+                "There are currently no available appointments."
+            );
+
+            return;
+        }
+
+        // Add available slots to dropdown
+        futureSlots.forEach((slot) => {
+
+            const option =
+                document.createElement("option");
+
+            const slotDate =
+                new Date(
+                    slot.date + "T00:00:00"
+                );
+
+            const formattedDate =
+                slotDate.toLocaleDateString(
+                    "en-US",
+                    {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+            option.value = slot.id;
+
+            option.textContent =
+                `${formattedDate} — ${slot.time}`;
+
+            slotSelect.appendChild(option);
+
+        });
+
+        // Store which appointment we're rescheduling
+        modal.dataset.appointmentId =
+            appointment.id;
+
+        modal.style.display = "flex";
+
+    });
+
+}
 
         container.appendChild(card);
 
     });
 }
+
+// =========================
+// RESCHEDULE APPOINTMENT
+// =========================
+
+const confirmReschedule =
+    document.getElementById("confirmReschedule");
+
+const cancelReschedule =
+    document.getElementById("cancelReschedule");
+
+const rescheduleModal =
+    document.getElementById("rescheduleModal");
+
+const rescheduleSlot =
+    document.getElementById("rescheduleSlot");
+
+
+// =========================
+// CANCEL RESCHEDULE
+// =========================
+
+cancelReschedule.addEventListener("click", () => {
+
+    rescheduleModal.style.display = "none";
+
+    rescheduleSlot.value = "";
+
+});
+
+
+// =========================
+// CONFIRM RESCHEDULE
+// =========================
+
+confirmReschedule.addEventListener("click", async () => {
+
+    const oldAppointmentId =
+        Number(rescheduleModal.dataset.appointmentId);
+
+    const newAppointmentId =
+        Number(rescheduleSlot.value);
+
+    if (!newAppointmentId) {
+
+        alert(
+            "Please select a new appointment."
+        );
+
+        return;
+    }
+
+    if (!oldAppointmentId) {
+
+        alert(
+            "Unable to identify the appointment."
+        );
+
+        return;
+    }
+
+
+    // =========================
+    // GET BOTH APPOINTMENTS
+    // =========================
+
+    const { data: oldAppointment, error: oldError } =
+        await client
+            .from("appointments")
+            .select("id, date, time, booked")
+            .eq("id", oldAppointmentId)
+            .single();
+
+    if (oldError || !oldAppointment) {
+
+        console.error(
+            "Error loading current appointment:",
+            oldError
+        );
+
+        alert(
+            "Unable to load the current appointment."
+        );
+
+        return;
+    }
+
+
+    const { data: newAppointment, error: newError } =
+        await client
+            .from("appointments")
+            .select("id, date, time, booked")
+            .eq("id", newAppointmentId)
+            .single();
+
+    if (newError || !newAppointment) {
+
+        console.error(
+            "Error loading new appointment:",
+            newError
+        );
+
+        alert(
+            "Unable to load the selected appointment."
+        );
+
+        return;
+    }
+
+
+    // Make absolutely sure the new slot is still available
+    if (newAppointment.booked === true) {
+
+        alert(
+            "That appointment was just taken. Please choose another."
+        );
+
+        rescheduleModal.style.display = "none";
+
+        await loadAppointments();
+
+        return;
+    }
+
+
+    // =========================
+    // SAVE OLD SLOT INFORMATION
+    // =========================
+
+    const oldDate = oldAppointment.date;
+    const oldTime = oldAppointment.time;
+
+    const newDate = newAppointment.date;
+    const newTime = newAppointment.time;
+
+
+    // =========================
+    // MOVE BOOKED APPOINTMENT
+    // =========================
+
+    const { error: moveError } =
+        await client
+            .from("appointments")
+            .update({
+
+                date: newDate,
+                time: newTime,
+
+                // New time needs confirmation
+                appointment_confirmed: false
+
+            })
+            .eq("id", oldAppointmentId);
+
+    if (moveError) {
+
+        console.error(
+            "Error moving appointment:",
+            moveError
+        );
+
+        alert(
+            "Unable to reschedule the appointment."
+        );
+
+        return;
+    }
+
+
+    // =========================
+    // RETURN OLD SLOT
+    // =========================
+
+    const { error: freeError } =
+        await client
+            .from("appointments")
+            .update({
+
+                date: oldDate,
+                time: oldTime,
+                booked: false,
+                cancelled: false,
+                appointment_confirmed: false,
+                staff_initials: null
+
+            })
+            .eq("id", newAppointmentId);
+
+    if (freeError) {
+
+        console.error(
+            "Error returning old appointment slot:",
+            freeError
+        );
+
+        // Try to undo the first update
+        await client
+            .from("appointments")
+            .update({
+
+                date: oldDate,
+                time: oldTime
+
+            })
+            .eq("id", oldAppointmentId);
+
+        alert(
+            "The appointment could not be fully rescheduled."
+        );
+
+        return;
+    }
+
+
+    // =========================
+    // CLOSE MODAL
+    // =========================
+
+    rescheduleModal.style.display = "none";
+
+    rescheduleSlot.value = "";
+
+
+    // =========================
+    // RELOAD APPOINTMENTS
+    // =========================
+
+    await loadAppointments();
+
+
+    alert(
+        "Appointment successfully rescheduled."
+    );
+
+});
 
 // =========================
 // ADMIN SEARCH
