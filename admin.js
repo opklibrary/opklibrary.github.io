@@ -116,9 +116,11 @@ function displayAppointments(data) {
         console.log("USER INFO:", appointment.user_info);
         console.log("WHY APPOINTMENT:", appointment.why_appointment);
 
-        const appointmentDateTime = new Date(
-            `${appointment.date}T${appointment.time}`
-        );
+    const startTime = appointment.time.split(" - ")[0];
+
+const appointmentDateTime = new Date(
+    `${appointment.date} ${startTime}`
+);
 
         console.log(
     "DATE CHECK:",
@@ -176,17 +178,20 @@ function displayAppointments(data) {
 
     appointmentsToDisplay.sort((a, b) => {
 
-        const dateA = new Date(
-            `${a.date}T${a.time}`
-        );
+    const startTimeA = a.time.split(" - ")[0];
+    const startTimeB = b.time.split(" - ")[0];
 
-        const dateB = new Date(
-            `${b.date}T${b.time}`
-        );
+    const dateA = new Date(
+        `${a.date} ${startTimeA}`
+    );
 
-        return dateA - dateB;
+    const dateB = new Date(
+        `${b.date} ${startTimeB}`
+    );
 
-    });
+    return dateA - dateB;
+
+});
 
     let currentMonth = "";
 
