@@ -672,6 +672,15 @@ body > h2 {
 }
 
 /* =========================
+   ADMIN VIEW BUTTONS
+========================= */
+
+.admin-view-buttons button.active-view {
+    background-color: #6b4c8a;
+    color: white;
+}
+
+/* =========================
    ADMIN TOOLBAR
    ========================= */
 
