@@ -120,6 +120,16 @@ function displayAppointments(data) {
             `${appointment.date}T${appointment.time}`
         );
 
+        console.log(
+    "DATE CHECK:",
+    appointment.date,
+    appointment.time,
+    "=>",
+    appointmentDateTime,
+    "NOW:",
+    now
+);
+
         // Canceled appointments ONLY go here
         if (appointment.cancelled === true) {
 
