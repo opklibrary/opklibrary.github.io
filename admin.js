@@ -119,7 +119,7 @@ function displayAppointments(data) {
     const upcomingAppointments = [];
     const pastAppointments = [];
 
-    data.forEach((appointment) => {
+    appointmentsToDisplay.forEach((appointment) => {
 
         const appointmentDateTime = new Date(
             appointment.date + "T" + appointment.time
@@ -337,6 +337,31 @@ searchBox.addEventListener("input", () => {
     });
 
     displayAppointments(filtered);
+
+    // =========================
+// ADMIN VIEW BUTTONS
+// =========================
+
+const showPastButton = document.getElementById("showPast");
+const adminViewTitle = document.getElementById("adminViewTitle");
+
+showPastButton.addEventListener("click", () => {
+
+    currentView = "past";
+
+    adminViewTitle.textContent = "Past Dates";
+
+    displayAppointments(allAppointments);
+
+});
+
+    adminViewTitle.addEventListener("click", () => {
+
+    currentView = "upcoming";
+
+    adminViewTitle.textContent = "Upcoming Appointments";
+
+    displayAppointments(allAppointments);
 
 });
 
