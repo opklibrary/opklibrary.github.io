@@ -262,7 +262,11 @@ if (appointmentFetchError) {
     const { error } = await client
     .from("appointments")
     .update({
+        .update({
         booked: true,
+        cancelled: false,
+        appointment_confirmed: false
+})
         staff_initials: staffInitials || null
     })
     .eq("id", selectedAppointment);
