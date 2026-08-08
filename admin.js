@@ -113,6 +113,13 @@ function displayAppointments(data) {
     data.forEach((appointment) => {
 
         console.log("FULL APPOINTMENT:", appointment);
+
+        // Hide normal available appointment slots
+        // Canceled appointments are allowed through even though booked = false
+        if (appointment.booked !== true && appointment.cancelled !== true) {
+      return;
+    }
+        
         console.log("USER INFO:", appointment.user_info);
         console.log("WHY APPOINTMENT:", appointment.why_appointment);
 
