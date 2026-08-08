@@ -263,8 +263,8 @@ if (appointmentFetchError) {
     .from("appointments")
     .update({
         .update({
-        booked: true,
-        cancelled: false,
+        cancelled: true,
+        booked: false,
         appointment_confirmed: false
 })
         staff_initials: staffInitials || null
