@@ -456,8 +456,6 @@ showCanceledButton.addEventListener("click", () => {
     displayAppointments(allAppointments);
 
 });
-    // Canceled appointment code will go here
-});
 
 // Run when admin page opens
 loadAppointments();
