@@ -1002,5 +1002,22 @@ body > h2 {
 
 .thank-you-container p {
     margin: 15px 0;
+
+   /* =========================
+   Past Appointments
+========================= */
+
+.appointment-card.past-appointment {
+    background-color: #eeeeee;
+}
+
+
+/* =========================
+   Canceled Appointments
+========================= */
+
+.appointment-card.canceled-appointment {
+    background-color: #f5e1e1;
+}
     line-height: 1.5;
 }
