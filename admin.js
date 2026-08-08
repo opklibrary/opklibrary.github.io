@@ -270,9 +270,17 @@ const appointmentDateTime = new Date(
         // APPOINTMENT CARD
         // =========================
 
-        const card = document.createElement("div");
+      const card = document.createElement("div");
 
         card.className = "appointment-card";
+
+        if (currentView === "past") {
+            card.classList.add("past-appointment");
+        }
+
+        if (currentView === "canceled") {
+            card.classList.add("canceled-appointment");
+        }
 
         card.innerHTML = `
             <h2>${formattedDate}</h2>
