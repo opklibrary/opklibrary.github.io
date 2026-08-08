@@ -70,6 +70,7 @@ async function loadAppointments() {
             date,
             time,
             booked,
+            cancelled,
             staff_initials,
             user_info (
                 name,
@@ -452,6 +453,9 @@ showCanceledButton.addEventListener("click", () => {
 
     adminViewTitle.textContent = "Canceled Appointments";
 
+    displayAppointments(allAppointments);
+
+});
     // Canceled appointment code will go here
 });
 
