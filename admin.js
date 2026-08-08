@@ -112,49 +112,85 @@ function displayAppointments(data) {
 
     container.innerHTML = "";
 
-    // Current date and time
+    // =========================
+    // CURRENT DATE AND TIME
+    // =========================
+
     const now = new Date();
 
-   // Separate appointments into upcoming and past
-const upcomingAppointments = [];
-const pastAppointments = [];
+    // =========================
+    // SEPARATE UPCOMING / PAST
+    // =========================
 
-data.forEach((appointment) => {
+    const upcomingAppointments = [];
+    const pastAppointments = [];
 
-    const appointmentDateTime = new Date(
-        appointment.date + "T" + appointment.time
-    );
+    data.forEach((appointment) => {
 
-    if (appointmentDateTime > now) {
-        upcomingAppointments.push(appointment);
-    } else {
-        pastAppointments.push(appointment);
+        console.log("CHECKING APPOINTMENT:", appointment.date, appointment.time);
+
+        // Create the appointment date/time
+        const appointmentDateTime = new Date(
+            `${appointment.date}T${appointment.time}`
+        );
+
+        console.log(
+            "APPOINTMENT DATETIME:",
+            appointmentDateTime,
+            "NOW:",
+            now
+        );
+
+        if (appointmentDateTime.getTime() > now.getTime()) {
+
+            upcomingAppointments.push(appointment);
+
+        } else {
+
+            pastAppointments.push(appointment);
+
+        }
+
+    });
+
+    console.log("UPCOMING:", upcomingAppointments);
+    console.log("PAST:", pastAppointments);
+
+    // =========================
+    // CHOOSE CURRENT VIEW
+    // =========================
+
+    let appointmentsToDisplay = [];
+
+    if (currentView === "past") {
+
+        appointmentsToDisplay = pastAppointments;
+
+    } else if (currentView === "upcoming") {
+
+        appointmentsToDisplay = upcomingAppointments;
+
+    } else if (currentView === "canceled") {
+
+        appointmentsToDisplay = [];
+
     }
 
-});
+    console.log("CURRENT VIEW:", currentView);
+    console.log("DISPLAYING:", appointmentsToDisplay);
 
-// Decide which appointments should be displayed
-let appointmentsToDisplay = [];
+    // =========================
+    // SORT APPOINTMENTS
+    // =========================
 
-if (currentView === "past") {
-
-    appointmentsToDisplay = pastAppointments;
-
-} else if (currentView === "upcoming") {
-
-    appointmentsToDisplay = upcomingAppointments;
-
-}
-    
-    // Keep appointments sorted by date and time
     appointmentsToDisplay.sort((a, b) => {
 
         const dateA = new Date(
-            a.date + "T" + a.time
+            `${a.date}T${a.time}`
         );
 
         const dateB = new Date(
-            b.date + "T" + b.time
+            `${b.date}T${b.time}`
         );
 
         return dateA - dateB;
@@ -162,7 +198,7 @@ if (currentView === "past") {
     });
 
     let currentMonth = "";
-
+    
     appointmentsToDisplay.forEach((appointment) => {
         
         console.log("FULL APPOINTMENT:", appointment);
