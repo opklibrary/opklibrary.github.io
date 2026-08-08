@@ -118,63 +118,64 @@ function displayAppointments(data) {
 
     const now = new Date();
 
-    // =========================
-    // SEPARATE UPCOMING / PAST
-    // =========================
+  // =========================
+// SEPARATE APPOINTMENTS
+// =========================
 
-    const upcomingAppointments = [];
-    const pastAppointments = [];
+const now = new Date();
 
-    data.forEach((appointment) => {
+const upcomingAppointments = [];
+const pastAppointments = [];
+const canceledAppointments = [];
 
-        console.log("CHECKING APPOINTMENT:", appointment.date, appointment.time);
+data.forEach((appointment) => {
 
-        // Create the appointment date/time
-        const appointmentDateTime = new Date(
-            `${appointment.date}T${appointment.time}`
-        );
+    console.log("FULL APPOINTMENT:", appointment);
+    console.log("USER INFO:", appointment.user_info);
+    console.log("WHY APPOINTMENT:", appointment.why_appointment);
 
-        console.log(
-            "APPOINTMENT DATETIME:",
-            appointmentDateTime,
-            "NOW:",
-            now
-        );
+    const appointmentDateTime = new Date(
+        `${appointment.date}T${appointment.time}`
+    );
 
-        if (appointmentDateTime.getTime() > now.getTime()) {
+    // Canceled appointments go ONLY into the canceled section
+    if (appointment.cancelled === true) {
 
-            upcomingAppointments.push(appointment);
+        canceledAppointments.push(appointment);
 
-        } else {
+    } else if (appointmentDateTime > now) {
 
-            pastAppointments.push(appointment);
+        // Future and not canceled
+        upcomingAppointments.push(appointment);
 
-        }
+    } else {
 
-    });
-
-    console.log("UPCOMING:", upcomingAppointments);
-    console.log("PAST:", pastAppointments);
-
-    // =========================
-    // CHOOSE CURRENT VIEW
-    // =========================
-
-    let appointmentsToDisplay = [];
-
-    if (currentView === "past") {
-
-        appointmentsToDisplay = pastAppointments;
-
-    } else if (currentView === "upcoming") {
-
-        appointmentsToDisplay = upcomingAppointments;
-
-    } else if (currentView === "canceled") {
-
-        appointmentsToDisplay = [];
+        // Past and not canceled
+        pastAppointments.push(appointment);
 
     }
+
+});
+
+// =========================
+// CHOOSE CURRENT VIEW
+// =========================
+
+let appointmentsToDisplay = [];
+
+if (currentView === "upcoming") {
+
+    appointmentsToDisplay = upcomingAppointments;
+
+} else if (currentView === "past") {
+
+    appointmentsToDisplay = pastAppointments;
+
+} else if (currentView === "canceled") {
+
+    appointmentsToDisplay = canceledAppointments;
+
+}
 
     console.log("CURRENT VIEW:", currentView);
     console.log("DISPLAYING:", appointmentsToDisplay);
