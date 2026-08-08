@@ -337,6 +337,8 @@ searchBox.addEventListener("input", () => {
     });
 
     displayAppointments(filtered);
+    
+});
 
  // =========================
 // ADMIN VIEW BUTTONS
