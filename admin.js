@@ -77,7 +77,6 @@ async function loadAppointments() {
                 describe_problem
             )
         `)
-        .eq("booked", true)
         .order("date")
         .order("time");
 
