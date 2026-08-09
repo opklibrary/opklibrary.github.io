@@ -48,23 +48,47 @@ async function loadAppointments() {
 
     const availableAppointments = data.filter(slot => {
 
-        // Split "12:00 AM - 1:00 AM" and only use the start time
-        const startTime = slot.time.split(" - ")[0];
+       // Split "12:00 AM - 1:00 AM" and only use the start time
+    const startTime = slot.time.split(" - ")[0];
 
-        const appointmentDateTime = new Date(
-            `${slot.date} ${startTime}`
-        );
+    const [year, month, day] = slot.date.split("-");
 
-        console.log({
-            date: slot.date,
-            time: slot.time,
-            appointmentDateTime,
-            now
-        });
+    const timeParts = startTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
 
-        return appointmentDateTime > now && slot.booked === false;
+    if (!timeParts) {
+        console.error("Invalid appointment time:", slot.time);
+        return false;
+    }
 
+    let hours = parseInt(timeParts[1], 10);
+    const minutes = parseInt(timeParts[2], 10);
+    const meridiem = timeParts[3].toUpperCase();
+
+    if (meridiem === "PM" && hours !== 12) {
+        hours += 12;
+    }
+
+    if (meridiem === "AM" && hours === 12) {
+        hours = 0;
+    }
+
+    const appointmentDateTime = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        hours,
+        minutes
+    );
+
+    console.log({
+        date: slot.date,
+        time: slot.time,
+        appointmentDateTime,
+        now
     });
+
+    return appointmentDateTime > now && slot.booked === false;
+});
 
 
     const container = document.getElementById("dates");
