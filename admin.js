@@ -208,16 +208,11 @@ const appointmentDateTime = new Date(
     console.log("CURRENT VIEW:", currentView);
     console.log("DISPLAYING:", appointmentsToDisplay);
 
-    // =========================
-    // SORT APPOINTMENTS
-    // =========================
+ // =========================
+// SORT APPOINTMENTS
+// =========================
 
-    appointmentsToDisplay.sort((a, b) => {
-
-    const startTimeA = a.time.split(" - ")[0];
-    const startTimeB = b.time.split(" - ")[0];
-
-   appointmentsToDisplay.sort((a, b) => {
+appointmentsToDisplay.sort((a, b) => {
 
     function getAppointmentDateTime(appointment) {
 
@@ -228,6 +223,7 @@ const appointmentDateTime = new Date(
         const timeParts = startTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
 
         if (!timeParts) {
+            console.error("Invalid appointment time:", appointment.time);
             return new Date(0);
         }
 
@@ -252,14 +248,13 @@ const appointmentDateTime = new Date(
         );
     }
 
-    return getAppointmentDateTime(a) - getAppointmentDateTime(b);
-
-});
+    const dateA = getAppointmentDateTime(a);
+    const dateB = getAppointmentDateTime(b);
 
     return dateA - dateB;
 
 });
-
+    
     let currentMonth = "";
 
     appointmentsToDisplay.forEach((appointment) => {
