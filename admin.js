@@ -127,10 +127,35 @@ function displayAppointments(data) {
         console.log("USER INFO:", appointment.user_info);
         console.log("WHY APPOINTMENT:", appointment.why_appointment);
 
-    const startTime = appointment.time.split(" - ")[0];
+   const startTime = appointment.time.split(" - ")[0];
+
+const [year, month, day] = appointment.date.split("-");
+
+const timeParts = startTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+
+if (!timeParts) {
+    console.error("Invalid appointment time:", appointment.time);
+    return;
+}
+
+let hours = parseInt(timeParts[1], 10);
+const minutes = parseInt(timeParts[2], 10);
+const meridiem = timeParts[3].toUpperCase();
+
+if (meridiem === "PM" && hours !== 12) {
+    hours += 12;
+}
+
+if (meridiem === "AM" && hours === 12) {
+    hours = 0;
+}
 
 const appointmentDateTime = new Date(
-    `${appointment.date} ${startTime}`
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    hours,
+    minutes
 );
 
         console.log(
@@ -192,13 +217,44 @@ const appointmentDateTime = new Date(
     const startTimeA = a.time.split(" - ")[0];
     const startTimeB = b.time.split(" - ")[0];
 
-    const dateA = new Date(
-        `${a.date} ${startTimeA}`
-    );
+   appointmentsToDisplay.sort((a, b) => {
 
-    const dateB = new Date(
-        `${b.date} ${startTimeB}`
-    );
+    function getAppointmentDateTime(appointment) {
+
+        const startTime = appointment.time.split(" - ")[0];
+
+        const [year, month, day] = appointment.date.split("-");
+
+        const timeParts = startTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+
+        if (!timeParts) {
+            return new Date(0);
+        }
+
+        let hours = parseInt(timeParts[1], 10);
+        const minutes = parseInt(timeParts[2], 10);
+        const meridiem = timeParts[3].toUpperCase();
+
+        if (meridiem === "PM" && hours !== 12) {
+            hours += 12;
+        }
+
+        if (meridiem === "AM" && hours === 12) {
+            hours = 0;
+        }
+
+        return new Date(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+            hours,
+            minutes
+        );
+    }
+
+    return getAppointmentDateTime(a) - getAppointmentDateTime(b);
+
+});
 
     return dateA - dateB;
 
