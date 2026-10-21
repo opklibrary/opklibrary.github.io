@@ -1,4 +1,5 @@
-// 1. Connect to Supabase
+
+ // 1. Connect to Supabase
 const PROJECT_URL = "https://wzjlytqilsjcboqpwldz.supabase.co/";
 const PUBLISHABLE_KEY = "sb_publishable_Nyt-q7qFiYGd7aV25sgGuQ_yk-1gHxN";
 
@@ -7,10 +8,20 @@ const client = window.supabase.createClient(
     PUBLISHABLE_KEY
 );
 
-
-// Store selected appointment
+// Store selected appointment and staff filter
 let selectedAppointment = null;
+let availableAppointments = [];
+let currentStaffFilter = "all";
 
+// Display names for database staff identifiers
+function getStaffName(assignedStaff) {
+    const staff = (assignedStaff || "").toLowerCase();
+
+    if (staff === "emma") return "Emma";
+    if (staff === "sarah") return "Sarah";
+
+    return "Staff assignment unavailable";
+}
 
 // Format dates for display
 function formatDate(dateString) {
@@ -24,85 +35,97 @@ function formatDate(dateString) {
     });
 }
 
-
+// Load appointments from Supabase
 async function loadAppointments() {
-
-    // Get today's date in YYYY-MM-DD format
-    const today = new Date().toISOString().split("T")[0];
-
     const { data, error } = await client
         .from("appointments")
         .select("*")
         .eq("booked", false)
+        .eq("cancelled", false)
         .order("date")
         .order("time");
 
     if (error) {
-        console.error(error);
+        console.error("Unable to load appointments:", error);
+        alert("Unable to load appointment times. Please refresh the page.");
         return;
     }
 
-
-    // Remove past appointments and already booked times
     const now = new Date();
 
-    const availableAppointments = data.filter(slot => {
+    // Remove appointments that have already passed
+    availableAppointments = data.filter(slot => {
+        if (!slot.date || !slot.time) {
+            return false;
+        }
 
-       // Split "12:00 AM - 1:00 AM" and only use the start time
-    const startTime = slot.time.split(" - ")[0];
+        const startTime = slot.time.split(" - ")[0];
+        const [year, month, day] = slot.date.split("-");
 
-    const [year, month, day] = slot.date.split("-");
+        const timeParts = startTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
 
-    const timeParts = startTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!timeParts) {
+            console.error("Invalid appointment time:", slot.time);
+            return false;
+        }
 
-    if (!timeParts) {
-        console.error("Invalid appointment time:", slot.time);
-        return false;
-    }
+        let hours = parseInt(timeParts[1], 10);
+        const minutes = parseInt(timeParts[2], 10);
+        const meridiem = timeParts[3].toUpperCase();
 
-    let hours = parseInt(timeParts[1], 10);
-    const minutes = parseInt(timeParts[2], 10);
-    const meridiem = timeParts[3].toUpperCase();
+        if (meridiem === "PM" && hours !== 12) {
+            hours += 12;
+        }
 
-    if (meridiem === "PM" && hours !== 12) {
-        hours += 12;
-    }
+        if (meridiem === "AM" && hours === 12) {
+            hours = 0;
+        }
 
-    if (meridiem === "AM" && hours === 12) {
-        hours = 0;
-    }
+        const appointmentDateTime = new Date(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+            hours,
+            minutes
+        );
 
-    const appointmentDateTime = new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-        hours,
-        minutes
-    );
-
-    console.log({
-        date: slot.date,
-        time: slot.time,
-        appointmentDateTime,
-        now
+        return appointmentDateTime > now;
     });
 
-    return appointmentDateTime > now && slot.booked === false;
-});
+    renderAppointments();
+}
 
-
+// Render appointments using the selected staff filter
+function renderAppointments() {
     const container = document.getElementById("dates");
     container.innerHTML = "";
 
+    // Filter by the assigned tech, not by the person booking
+    const filteredAppointments = availableAppointments.filter(slot => {
+        const staff = (slot.assigned_staff || "").toLowerCase();
 
-    // =========================
-    // GROUP APPOINTMENTS BY MONTH
-    // =========================
+        if (currentStaffFilter === "all") {
+            return true;
+        }
 
+        return staff === currentStaffFilter;
+    });
+
+    if (filteredAppointments.length === 0) {
+        const message = document.createElement("p");
+        message.textContent =
+            currentStaffFilter === "all"
+                ? "There are currently no available appointments."
+                : `There are currently no available appointments for ${getStaffName(currentStaffFilter)}.`;
+
+        container.appendChild(message);
+        return;
+    }
+
+    // Group appointments by month and date
     const groupedMonths = {};
 
-    availableAppointments.forEach(slot => {
-
+    filteredAppointments.forEach(slot => {
         const dateObject = new Date(slot.date + "T00:00:00");
 
         const monthKey = dateObject.toLocaleDateString("en-US", {
@@ -119,55 +142,37 @@ async function loadAppointments() {
         }
 
         groupedMonths[monthKey][slot.date].push(slot);
-
     });
 
-
-    // =========================
-    // CREATE EACH MONTH
-    // =========================
-
+    // Create each month
     Object.keys(groupedMonths).forEach(month => {
-
         const monthSection = document.createElement("div");
         monthSection.className = "month-section";
 
-
-        // Month heading
         const monthHeading = document.createElement("h2");
         monthHeading.className = "month-heading";
         monthHeading.textContent = month;
-
         monthSection.appendChild(monthHeading);
 
-
-        // Calendar grid
         const monthGrid = document.createElement("div");
         monthGrid.className = "month-grid";
 
-
-        // =========================
-        // CREATE EACH DATE
-        // =========================
-
+        // Create each date
         Object.keys(groupedMonths[month]).forEach(date => {
-
             const daySection = document.createElement("div");
             daySection.className = "day-section";
 
-
-            // Date heading
             const dateObject = new Date(date + "T00:00:00");
 
             const heading = document.createElement("h3");
             heading.className = "day-heading";
-            
-heading.classList.add(
-    dateObject.toLocaleDateString("en-US", {
-        month: "long"
-    }).toLowerCase()
-);
-            
+
+            heading.classList.add(
+                dateObject.toLocaleDateString("en-US", {
+                    month: "long"
+                }).toLowerCase()
+            );
+
             heading.textContent = dateObject.toLocaleDateString("en-US", {
                 weekday: "short",
                 month: "long",
@@ -176,174 +181,209 @@ heading.classList.add(
 
             daySection.appendChild(heading);
 
-
-            // =========================
-            // ADD APPOINTMENT TIMES
-            // =========================
-
+            // Add appointment times
             groupedMonths[month][date].forEach(slot => {
-
                 const option = document.createElement("label");
                 option.className = "appointment-option";
-
 
                 const radio = document.createElement("input");
                 radio.type = "radio";
                 radio.name = "appointment";
                 radio.value = slot.id;
 
+                const details = document.createElement("div");
+                details.className = "appointment-option-details";
 
-                const labelText = document.createElement("span");
-                labelText.textContent = slot.time;
+                const timeText = document.createElement("span");
+                timeText.className = "appointment-time";
+                timeText.textContent = slot.time;
 
+                const staffText = document.createElement("span");
+                const assignedStaff = (slot.assigned_staff || "").toLowerCase();
+
+                staffText.className = "appointment-staff";
+
+                if (assignedStaff === "emma" || assignedStaff === "sarah") {
+                    staffText.textContent = "Tech: " + getStaffName(assignedStaff);
+                    staffText.classList.add("staff-" + assignedStaff);
+                } else {
+                    staffText.textContent = getStaffName(assignedStaff);
+                    staffText.classList.add("staff-unassigned");
+                }
+
+                details.appendChild(timeText);
+                details.appendChild(staffText);
 
                 radio.addEventListener("change", () => {
-
                     if (radio.checked) {
-
                         selectedAppointment = slot.id;
-
-                        console.log("Selected:", selectedAppointment);
-
                         checkFormCompletion();
-
                     }
-
                 });
 
-
                 option.appendChild(radio);
-                option.appendChild(labelText);
+                option.appendChild(details);
 
                 daySection.appendChild(option);
-
             });
 
-
             monthGrid.appendChild(daySection);
-
         });
 
-
         monthSection.appendChild(monthGrid);
-
         container.appendChild(monthSection);
-
     });
-
 }
+
+// Connect the All Staff / Emma / Sarah filter buttons
+document.querySelectorAll('input[name="staffFilter"]').forEach(radio => {
+    radio.addEventListener("change", () => {
+        if (!radio.checked) return;
+
+        currentStaffFilter = radio.value;
+
+        // Clear a previous selection when changing staff filters
+        selectedAppointment = null;
+
+        renderAppointments();
+        checkFormCompletion();
+    });
+});
 
 // Submit appointment
 async function submitAppointment() {
-
     if (selectedAppointment === null) {
         alert("Please select an appointment.");
         return;
     }
 
-    // Get user information
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const whatTech = document.getElementById("whatTech").value.trim();
 
     const staffInitials = document
-    .getElementById("staffInitials")
-    .value
-    .trim()
-    .toUpperCase();
+        .getElementById("staffInitials")
+        .value
+        .trim()
+        .toUpperCase();
 
-      // Get reason for appointment
+    // Get reason for appointment
     const learn = document.getElementById("learn").checked;
     const need = document.getElementById("need").checked;
     const newDevice = document.getElementById("new").checked;
     const help = document.getElementById("help").checked;
     const other = document.getElementById("other").checked;
-    const describeProblem = document.getElementById("describeProblem").value.trim();
+    const describeProblem = document
+        .getElementById("describeProblem")
+        .value
+        .trim();
 
-    // Check required fields
     if (!name || !email || !phone) {
         alert("Please fill out your name and phone number. Please write NULL for email if you do not have one.");
         return;
     }
-    
-console.log("Selected appointment:", selectedAppointment);
-console.log("Type:", typeof selectedAppointment);
 
-    // Get appointment date and time
-const { data: appointmentData, error: appointmentFetchError } = await client
-    .from("appointments")
-    .select("date, time")
-    .eq("id", selectedAppointment)
-    .single();
+    // Get the selected slot, including its actual staff assignment
+    const { data: appointmentData, error: appointmentFetchError } = await client
+        .from("appointments")
+        .select("date, time, assigned_staff, booked, cancelled")
+        .eq("id", selectedAppointment)
+        .single();
 
-if (appointmentFetchError) {
-    console.error("APPOINTMENT FETCH ERROR:", appointmentFetchError);
-    alert("Unable to find the selected appointment.");
-    return;
-}
-    
-const { error } = await client
-    .from("appointments")
-    .update({
-        booked: true,
-        cancelled: false,
-        appointment_confirmed: false,
-        staff_initials: staffInitials || null
-    })
-    .eq("id", selectedAppointment);
+    if (appointmentFetchError || !appointmentData) {
+        console.error("APPOINTMENT FETCH ERROR:", appointmentFetchError);
+        alert("Unable to find the selected appointment. Please refresh and try again.");
+        return;
+    }
+
+    if (
+        appointmentData.booked ||
+        appointmentData.cancelled ||
+        !appointmentData.assigned_staff
+    ) {
+        alert("This appointment is no longer available or has no staff assignment. Please refresh and choose another time.");
+        await loadAppointments();
+        return;
+    }
+
+    const assignedStaff = appointmentData.assigned_staff.toLowerCase();
+
+    if (assignedStaff !== "emma" && assignedStaff !== "sarah") {
+        alert("This appointment has an invalid staff assignment. Please contact the library.");
+        return;
+    }
+
+    // Save booking to the selected slot
+    const { data: updatedAppointments, error } = await client
+        .from("appointments")
+        .update({
+            booked: true,
+            cancelled: false,
+            appointment_confirmed: false,
+            staff_initials: staffInitials || null
+        })
+        .eq("id", selectedAppointment)
+        .eq("booked", false)
+        .eq("cancelled", false)
+        .select("id");
 
     if (error) {
-        console.error(error);
+        console.error("BOOKING ERROR:", error);
+        alert("Unable to book this appointment. Please refresh and try again.");
+        return;
+    }
+
+    if (!updatedAppointments || updatedAppointments.length === 0) {
+        alert("This appointment may have just been booked by someone else. Please refresh and choose another time.");
+        await loadAppointments();
         return;
     }
 
     // Save user information
     const { error: userError } = await client
         .from("user_info")
-        .insert([
-            {
-                appointment_id: selectedAppointment,
-                name: name,
-                phone_number: phone,
-                email: email,
-                what_tech: whatTech
-            }
-        ]);
-    
-   if (userError) {
-    console.error("USER INFO ERROR:", userError);
-    alert("Unable to save user information: " + userError.message);
-    return;
-}
-       // Save reason for appointment
-    const { error: reasonError } = await client
-        .from("why_appointment")
-        .insert([
-            {
-                appointment_id: selectedAppointment,
-                learn: learn,
-                need: need,
-                new: newDevice,
-                help: help,
-                other: other,
-                describe_problem: describeProblem
-            }
-        ]);
+        .insert([{
+            appointment_id: selectedAppointment,
+            name: name,
+            phone_number: phone,
+            email: email,
+            what_tech: whatTech
+        }]);
 
-    if (reasonError) {
-        console.error(reasonError);
-        alert("Unable to save reason for appointment.");
+    if (userError) {
+        console.error("USER INFO ERROR:", userError);
+        alert("The appointment was reserved, but saving your information failed. Please contact the library.");
         return;
     }
-    
-    // Send email notification
+
+    // Save reason for appointment
+    const { error: reasonError } = await client
+        .from("why_appointment")
+        .insert([{
+            appointment_id: selectedAppointment,
+            learn: learn,
+            need: need,
+            new: newDevice,
+            help: help,
+            other: other,
+            describe_problem: describeProblem
+        }]);
+
+    if (reasonError) {
+        console.error("REASON ERROR:", reasonError);
+        alert("The appointment was reserved, but saving the reason failed. Please contact the library.");
+        return;
+    }
+
+    // Send email notification, including the assigned tech
     const { data: emailData, error: emailError } = await client.functions.invoke(
         "clever-endpoint",
         {
             body: {
                 date: appointmentData.date,
                 time: appointmentData.time,
+                assigned_staff: getStaffName(assignedStaff),
                 name: name,
                 email: email,
                 phone: phone,
@@ -355,20 +395,14 @@ const { error } = await client
 
     if (emailError) {
         console.error("EMAIL ERROR:", emailError);
-        alert("Appointment was saved, but the email notification could not be sent.");
+        alert("Your appointment was saved, but the email notification could not be sent. Please contact the library.");
         return;
     }
 
     console.log("Appointment email sent successfully:", emailData);
-    
+
     window.location.href = "submitted.html";
-
-    selectedAppointment = null;
-
-    loadAppointments();
-
 }
-
 
 // Button connection
 document
@@ -384,7 +418,7 @@ function checkFormCompletion() {
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
 
-    if (name && email && phone && selectedAppointment && agreement.checked) {
+    if (name && email && phone && selectedAppointment !== null && agreement.checked) {
         submitButton.disabled = false;
     } else {
         submitButton.disabled = true;
@@ -394,15 +428,10 @@ function checkFormCompletion() {
 document.addEventListener("input", checkFormCompletion);
 agreement.addEventListener("change", checkFormCompletion);
 
-
-
 // Start page
 loadAppointments();
 
-// =========================
-// STAFF LOGIN
-// =========================
-
+// Staff login
 document.getElementById("adminLogin").addEventListener("click", () => {
     window.location.href = "admin-login.html";
 });
