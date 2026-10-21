@@ -1184,3 +1184,41 @@ body > h2 {
     background-color: #ddd;
     color: #333;
 }
+
+
+/* Appointment time and assigned tech */
+.appointment-option-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+}
+
+.appointment-time {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.appointment-staff {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.appointment-staff.staff-emma {
+    color: #245b91;
+    background: #e5f1ff;
+}
+
+.appointment-staff.staff-sarah {
+    color: #405d48;
+    background: #e8f0e9;
+}
+
+.appointment-staff.staff-unassigned {
+    color: #8a3030;
+    background: #fbe7e7;
+}
