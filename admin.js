@@ -260,8 +260,13 @@ appointmentsToDisplay.sort((a, b) => {
 
     appointmentsToDisplay.forEach((appointment) => {
 
-        const user = appointment.user_info?.[0];
-        const reason = appointment.why_appointment?.[0];
+  const user = [...(appointment.user_info || [])]
+    .sort((a, b) =>
+        new Date(b.submitted_at || 0) -
+        new Date(a.submitted_at || 0)
+    )[0];
+
+const reason = appointment.why_appointment?.[0];
 
         // =========================
         // SUBMITTED TIME
