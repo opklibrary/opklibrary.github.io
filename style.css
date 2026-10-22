@@ -1226,7 +1226,7 @@ body > h2 {
 /* Assigned tech labels and appointment card outlines */
 
 .appointment-card.staff-emma {
-    border: 2px solid #3984D6;
+    border: 2px solid #66859B;
 }
 
 .appointment-card.staff-sarah {
@@ -1244,7 +1244,7 @@ body > h2 {
 }
 
 .staff-emma .assigned-staff-label {
-    color: #3984D6;
+    color: #66859B;
 }
 
 .staff-sarah .assigned-staff-label {
