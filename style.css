@@ -1222,3 +1222,35 @@ body > h2 {
     color: #8a3030;
     background: #fbe7e7;
 }
+
+/* Assigned tech labels and appointment card outlines */
+
+.appointment-card.staff-emma {
+    border: 2px solid #3984D6;
+}
+
+.appointment-card.staff-sarah {
+    border: 2px solid #299B68;
+}
+
+.appointment-card.staff-unassigned {
+    border: 2px solid #999999;
+}
+
+.assigned-staff-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.staff-emma .assigned-staff-label {
+    color: #3984D6;
+}
+
+.staff-sarah .assigned-staff-label {
+    color: #299B68;
+}
+
+.staff-unassigned .assigned-staff-label {
+    color: #777777;
+}
