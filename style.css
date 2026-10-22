@@ -1235,7 +1235,7 @@ body > h2 {
 }
 
 .appointment-card.staff-sarah {
-    border: 3px solid #299B68;
+    border: 3px solid #405d48;
 }
 
 .appointment-card.staff-unassigned {
@@ -1253,7 +1253,7 @@ body > h2 {
 }
 
 .staff-sarah .assigned-staff-label {
-    color: #299B68;
+    color: #405d48;
 }
 
 .staff-unassigned .assigned-staff-label {
