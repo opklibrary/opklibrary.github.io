@@ -312,20 +312,19 @@ async function submitAppointment() {
         return;
     }
 
-    // Save booking to the selected slot
-    const { data: updatedAppointments, error } = await client
-        .from("appointments")
-        .update({
-            booked: true,
-            cancelled: false,
-            appointment_confirmed: false,
-            staff_initials: staffInitials || null
-        })
-        .eq("id", selectedAppointment)
-        .eq("booked", false)
-        .eq("cancelled", false)
-        .select("id");
-
+   // Save booking to the selected slot
+const { data: updatedAppointments, error } = await client
+    .from("appointments")
+    .update({
+        booked: true,
+        cancelled: false,
+        appointment_confirmed: false,
+        staff_initials: staffInitials || null
+    })
+    .eq("id", selectedAppointment)
+    .eq("booked", false)
+    .select("id");
+ 
     if (error) {
         console.error("BOOKING ERROR:", error);
         alert("Unable to book this appointment. Please refresh and try again.");
