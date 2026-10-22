@@ -297,10 +297,9 @@ async function submitAppointment() {
     }
 
     if (
-        appointmentData.booked ||
-        appointmentData.cancelled ||
-        !appointmentData.assigned_staff
-    ) {
+    appointmentData.booked ||
+    !appointmentData.assigned_staff
+) {
         alert("This appointment is no longer available or has no staff assignment. Please refresh and choose another time.");
         await loadAppointments();
         return;
