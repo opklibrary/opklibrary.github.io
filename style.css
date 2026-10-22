@@ -152,7 +152,9 @@ body > h2 {
 
 .day-heading.november {
     background-color: #963747;
-   .day-heading.november .day-name,
+}
+
+.day-heading.november .day-name,
 .day-heading.november .day-number {
     color: #FFFFFF;
 }
