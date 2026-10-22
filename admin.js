@@ -61,6 +61,7 @@ async function loadAppointments() {
             cancelled,
             appointment_confirmed,
             staff_initials,
+            assigned_staff,
             user_info (
                 name,
                 phone_number,
@@ -334,7 +335,25 @@ appointmentsToDisplay.sort((a, b) => {
 
       const card = document.createElement("div");
 
-        card.className = "appointment-card";
+card.className = "appointment-card";
+
+// Identify the tech assigned to this appointment
+const assignedStaff = (appointment.assigned_staff || "")
+    .toLowerCase()
+    .trim();
+
+let staffName = "Unassigned";
+let staffClass = "staff-unassigned";
+
+if (assignedStaff === "emma") {
+    staffName = "Emma";
+    staffClass = "staff-emma";
+} else if (assignedStaff === "sarah") {
+    staffName = "Sarah";
+    staffClass = "staff-sarah";
+}
+
+card.classList.add(staffClass);
 
         if (currentView === "past") {
             card.classList.add("past-appointment");
