@@ -152,6 +152,9 @@ body > h2 {
 
 .day-heading.november {
     background-color: #963747;
+   .day-heading.november .day-name,
+.day-heading.november .day-number {
+    color: #FFFFFF;
 }
 
 .day-heading.december {
@@ -374,12 +377,12 @@ body > h2 {
     box-shadow: 0 0 12px rgba(230, 107, 112, 0.4);
 }
 
-/* Emma: lighter blue */
+/* Emma: muted blue-gray */
 .staff-filter-options label:has(input[value="emma"]:checked) {
-    background: #5b9de0;
-    border-color: #5b9de0;
+    background: #66859B;
+    border-color: #66859B;
     color: white;
-    box-shadow: 0 0 12px rgba(91, 157, 224, 0.4);
+    box-shadow: 0 0 12px rgba(102, 133, 155, 0.4);
 }
 
 /* Sarah: grey-green */
@@ -1209,8 +1212,8 @@ body > h2 {
 }
 
 .appointment-staff.staff-emma {
-    color: #245b91;
-    background: #e5f1ff;
+    color: #4D697D;
+    background: #E8EEF2;
 }
 
 .appointment-staff.staff-sarah {
