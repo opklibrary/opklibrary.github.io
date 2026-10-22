@@ -364,6 +364,9 @@ card.classList.add(staffClass);
         }
 
         card.innerHTML = `
+        
+        <div class="assigned-staff-label">${staffName}</div>
+        
             <h2>${formattedDate}</h2>
 
             <h3>${appointment.time}</h3>
