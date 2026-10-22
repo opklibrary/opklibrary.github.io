@@ -41,7 +41,6 @@ async function loadAppointments() {
         .from("appointments")
         .select("*")
         .eq("booked", false)
-        .eq("cancelled", false)
         .order("date")
         .order("time");
 
