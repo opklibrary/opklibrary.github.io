@@ -62,6 +62,7 @@ async function loadAppointments() {
             appointment_confirmed,
             staff_initials,
             assigned_staff,
+            staff_notes,
             user_info (
                 name,
                 phone_number,
