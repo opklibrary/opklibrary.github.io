@@ -736,6 +736,52 @@ if (confirmButton) {
             });
 
         }
+
+// =========================
+// STAFF NOTES BUTTON
+// =========================
+
+const staffNotesButton =
+    card.querySelector(".staff-notes-button");
+
+if (staffNotesButton) {
+    staffNotesButton.addEventListener("click", async () => {
+        const existingNotes = appointment.staff_notes || "";
+
+        const newNotes = prompt(
+            "Private staff notes for this appointment:\n\n" +
+            "(These notes are only for library staff.)",
+            existingNotes
+        );
+
+        // Cancel was clicked; do not change anything.
+        if (newNotes === null) {
+            return;
+        }
+
+        const trimmedNotes = newNotes.trim();
+
+        const { error } = await client
+            .from("appointments")
+            .update({
+                staff_notes: trimmedNotes || null
+            })
+            .eq("id", appointment.id);
+
+        if (error) {
+            console.error("Error saving staff notes:", error);
+            alert("Unable to save staff notes. Please try again.");
+            return;
+        }
+
+        appointment.staff_notes = trimmedNotes;
+
+        staffNotesButton.textContent =
+            trimmedNotes ? "📝" : "+";
+
+        alert("Staff notes saved.");
+    });
+}
         
 // =========================
 // CANCEL BUTTON
