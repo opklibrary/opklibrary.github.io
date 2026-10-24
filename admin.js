@@ -495,139 +495,239 @@ if (confirmButton) {
     });
 
 }
+ 
         // =========================
-// RESCHEDULE BUTTON
-// =========================
+        // RESCHEDULE BUTTON
+        // =========================
 
-const rescheduleButton =
-    card.querySelector(".reschedule-button");
+        const rescheduleButton =
+            card.querySelector(".reschedule-button");
 
-if (rescheduleButton) {
+        if (rescheduleButton) {
 
-    rescheduleButton.addEventListener("click", async () => {
+            rescheduleButton.addEventListener("click", async () => {
 
-        const modal =
-            document.getElementById("rescheduleModal");
+                const modal =
+                    document.getElementById("rescheduleModal");
 
-        const currentAppointmentText =
-            document.getElementById(
-                "rescheduleCurrentAppointment"
-            );
+                const currentAppointmentText =
+                    document.getElementById("rescheduleCurrentAppointment");
 
-        const slotSelect =
-            document.getElementById("rescheduleSlot");
+                const slotSelect =
+                    document.getElementById("rescheduleSlot");
 
-        const currentDate =
-            new Date(
-                appointment.date + "T00:00:00"
-            ).toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric"
-            });
+                const sameTechName =
+                    document.getElementById("sameTechName");
 
-        currentAppointmentText.textContent =
-            `Currently scheduled for ${currentDate} at ${appointment.time}`;
+                const otherTechName =
+                    document.getElementById("otherTechName");
 
-        // Clear old choices
-        slotSelect.innerHTML = `
-            <option value="">
-                Select an available appointment
-            </option>
-        `;
+                const techChoices = document.querySelectorAll(
+                    'input[name="rescheduleTechChoice"]'
+                );
 
-        // Get currently available appointments
-        const { data: availableSlots, error } =
-            await client
-                .from("appointments")
-                .select("id, date, time")
-                .eq("booked", false)
-                .eq("cancelled", false)
-                .order("date")
-                .order("time");
+                const originalStaff =
+                    (appointment.assigned_staff || "").toLowerCase().trim();
 
-        if (error) {
+                if (!["emma", "sarah"].includes(originalStaff)) {
+                    alert(
+                        "This appointment has no valid tech assignment. Please check its assigned tech before rescheduling."
+                    );
+                    return;
+                }
 
-            console.error(
-                "Error loading available appointments:",
-                error
-            );
+                const otherStaff =
+                    originalStaff === "emma" ? "sarah" : "emma";
 
-            alert(
-                "Unable to load available appointments."
-            );
+                const staffLabel = (staff) =>
+                    staff.charAt(0).toUpperCase() + staff.slice(1);
 
-            return;
-        }
+                sameTechName.textContent =
+                    `Book ${staffLabel(originalStaff)}`;
 
-        const now = new Date();
+                otherTechName.textContent =
+                    `Book ${staffLabel(otherStaff)}`;
 
-        // Only show future appointments
-        const futureSlots =
-            availableSlots.filter((slot) => {
+                const currentDate = new Date(
+                    appointment.date + "T00:00:00"
+                ).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                });
 
-                const startTime =
-                    slot.time.split(" - ")[0];
+                currentAppointmentText.textContent =
+                    `Currently scheduled for ${currentDate} at ${appointment.time} with ${staffLabel(originalStaff)}.`;
 
-                const slotDateTime =
-                    new Date(
-                        `${slot.date} ${startTime}`
+                // Remember the appointment being rescheduled.
+                modal.dataset.appointmentId = appointment.id;
+                modal.dataset.originalStaff = originalStaff;
+
+                // Start with "Keep Same Tech" selected.
+                techChoices.forEach((choice) => {
+                    choice.checked = choice.value === "same";
+                });
+
+                slotSelect.innerHTML =
+                    '<option value="">Loading available appointments...</option>';
+
+                modal.style.display = "flex";
+
+                // Parse the date and start time consistently.
+                const parseSlotDateTime = (date, time) => {
+                    const match = time.match(
+                        /(\d{1,2}):(\d{2})\s*(AM|PM)/i
                     );
 
-                return slotDateTime > now;
+                    if (!match) return null;
+
+                    let hours = Number(match[1]);
+                    const minutes = Number(match[2]);
+                    const meridiem = match[3].toUpperCase();
+
+                    if (meridiem === "PM" && hours !== 12) {
+                        hours += 12;
+                    }
+
+                    if (meridiem === "AM" && hours === 12) {
+                        hours = 0;
+                    }
+
+                    const [year, month, day] =
+                        date.split("-").map(Number);
+
+                    return new Date(
+                        year,
+                        month - 1,
+                        day,
+                        hours,
+                        minutes
+                    );
+                };
+
+                // Load slots appropriate for the selected tech choice.
+                const loadRescheduleSlots = async () => {
+
+                    const selectedChoice =
+                        document.querySelector(
+                            'input[name="rescheduleTechChoice"]:checked'
+                        )?.value || "same";
+
+                    slotSelect.innerHTML =
+                        '<option value="">Loading available appointments...</option>';
+
+                    const { data: availableSlots, error } =
+                        await client
+                            .from("appointments")
+                            .select("id, date, time, assigned_staff, booked, cancelled")
+                            .eq("booked", false)
+                            .eq("cancelled", false)
+                            .order("date")
+                            .order("time");
+
+                    if (error) {
+                        console.error(
+                            "Error loading available appointments:",
+                            error
+                        );
+
+                        slotSelect.innerHTML =
+                            '<option value="">Unable to load appointments</option>';
+
+                        alert("Unable to load available appointments.");
+                        return;
+                    }
+
+                    const now = new Date();
+
+                    const futureSlots = (availableSlots || [])
+                        .filter((slot) => {
+
+                            const staff =
+                                (slot.assigned_staff || "")
+                                    .toLowerCase()
+                                    .trim();
+
+                            if (!["emma", "sarah"].includes(staff)) {
+                                return false;
+                            }
+
+                            if (selectedChoice === "same" &&
+                                staff !== originalStaff) {
+                                return false;
+                            }
+
+                            if (selectedChoice === "switch" &&
+                                staff !== otherStaff) {
+                                return false;
+                            }
+
+                            const slotDateTime =
+                                parseSlotDateTime(slot.date, slot.time);
+
+                            return slotDateTime && slotDateTime > now;
+                        })
+                        .sort((a, b) => {
+                            return (
+                                parseSlotDateTime(a.date, a.time) -
+                                parseSlotDateTime(b.date, b.time)
+                            );
+                        });
+
+                    slotSelect.innerHTML = "";
+
+                    const placeholder =
+                        document.createElement("option");
+
+                    placeholder.value = "";
+                    placeholder.textContent =
+                        futureSlots.length
+                            ? "Select an available appointment"
+                            : "No future appointments available";
+
+                    slotSelect.appendChild(placeholder);
+
+                    futureSlots.forEach((slot) => {
+
+                        const option =
+                            document.createElement("option");
+
+                        const slotDate = new Date(
+                            slot.date + "T00:00:00"
+                        );
+
+                        const formattedDate =
+                            slotDate.toLocaleDateString("en-US", {
+                                weekday: "long",
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric"
+                            });
+
+                        const staff =
+                            staffLabel(
+                                slot.assigned_staff.toLowerCase().trim()
+                            );
+
+                        option.value = slot.id;
+                        option.textContent =
+                            `${formattedDate} — ${slot.time} — ${staff}`;
+
+                        slotSelect.appendChild(option);
+                    });
+                };
+
+                // Update the dropdown whenever the choice changes.
+                techChoices.forEach((choice) => {
+                    choice.onchange = loadRescheduleSlots;
+                });
+
+                await loadRescheduleSlots();
 
             });
 
-        if (futureSlots.length === 0) {
-
-            alert(
-                "There are currently no available appointments."
-            );
-
-            return;
         }
-
-        // Add available slots to dropdown
-        futureSlots.forEach((slot) => {
-
-            const option =
-                document.createElement("option");
-
-            const slotDate =
-                new Date(
-                    slot.date + "T00:00:00"
-                );
-
-            const formattedDate =
-                slotDate.toLocaleDateString(
-                    "en-US",
-                    {
-                        weekday: "long",
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric"
-                    }
-                );
-
-            option.value = slot.id;
-
-            option.textContent =
-                `${formattedDate} — ${slot.time}`;
-
-            slotSelect.appendChild(option);
-
-        });
-
-        // Store which appointment we're rescheduling
-        modal.dataset.appointmentId =
-            appointment.id;
-
-        modal.style.display = "flex";
-
-    });
-
-}
         
 // =========================
 // CANCEL BUTTON
@@ -729,210 +829,244 @@ cancelReschedule.addEventListener("click", () => {
 });
 
 
-// =========================
-// CONFIRM RESCHEDULE
-// =========================
 
-confirmReschedule.addEventListener("click", async () => {
-
-    const oldAppointmentId =
-        Number(rescheduleModal.dataset.appointmentId);
-
-    const newAppointmentId =
-        Number(rescheduleSlot.value);
-
-    if (!newAppointmentId) {
-
-        alert(
-            "Please select a new appointment."
-        );
-
-        return;
-    }
-
-    if (!oldAppointmentId) {
-
-        alert(
-            "Unable to identify the appointment."
-        );
-
-        return;
-    }
-
-
-    // =========================
-    // GET BOTH APPOINTMENTS
-    // =========================
-
-    const { data: oldAppointment, error: oldError } =
-        await client
-            .from("appointments")
-            .select("id, date, time, booked")
-            .eq("id", oldAppointmentId)
-            .single();
-
-    if (oldError || !oldAppointment) {
-
-        console.error(
-            "Error loading current appointment:",
-            oldError
-        );
-
-        alert(
-            "Unable to load the current appointment."
-        );
-
-        return;
-    }
-
-
-    const { data: newAppointment, error: newError } =
-        await client
-            .from("appointments")
-            .select("id, date, time, booked")
-            .eq("id", newAppointmentId)
-            .single();
-
-    if (newError || !newAppointment) {
-
-        console.error(
-            "Error loading new appointment:",
-            newError
-        );
-
-        alert(
-            "Unable to load the selected appointment."
-        );
-
-        return;
-    }
-
-
-    // Make absolutely sure the new slot is still available
-    if (newAppointment.booked === true) {
-
-        alert(
-            "That appointment was just taken. Please choose another."
-        );
-
-        rescheduleModal.style.display = "none";
-
-        await loadAppointments();
-
-        return;
-    }
-
-
-    // =========================
-    // SAVE OLD SLOT INFORMATION
-    // =========================
-
-    const oldDate = oldAppointment.date;
-    const oldTime = oldAppointment.time;
-
-    const newDate = newAppointment.date;
-    const newTime = newAppointment.time;
-
-
-    // =========================
-    // MOVE BOOKED APPOINTMENT
-    // =========================
-
-    const { error: moveError } =
-        await client
-            .from("appointments")
-            .update({
-
-                date: newDate,
-                time: newTime,
-
-                // New time needs confirmation
-                appointment_confirmed: false
-
-            })
-            .eq("id", oldAppointmentId);
-
-    if (moveError) {
-
-        console.error(
-            "Error moving appointment:",
-            moveError
-        );
-
-        alert(
-            "Unable to reschedule the appointment."
-        );
-
-        return;
-    }
-
-
-    // =========================
-    // RETURN OLD SLOT
-    // =========================
-
-    const { error: freeError } =
-        await client
-            .from("appointments")
-            .update({
-
-                date: oldDate,
-                time: oldTime,
-                booked: false,
-                cancelled: false,
-                appointment_confirmed: false,
-                staff_initials: null
-
-            })
-            .eq("id", newAppointmentId);
-
-    if (freeError) {
-
-        console.error(
-            "Error returning old appointment slot:",
-            freeError
-        );
-
-        // Try to undo the first update
-        await client
-            .from("appointments")
-            .update({
-
-                date: oldDate,
-                time: oldTime
-
-            })
-            .eq("id", oldAppointmentId);
-
-        alert(
-            "The appointment could not be fully rescheduled."
-        );
-
-        return;
-    }
-
-
-    // =========================
-    // CLOSE MODAL
-    // =========================
-
-    rescheduleModal.style.display = "none";
-
-    rescheduleSlot.value = "";
-
-
-    // =========================
-    // RELOAD APPOINTMENTS
-    // =========================
-
-    await loadAppointments();
-
-
-    alert(
-        "Appointment successfully rescheduled."
-    );
-
-});
+        // =========================
+        // CONFIRM RESCHEDULE
+        // =========================
+
+        confirmReschedule.addEventListener("click", async () => {
+
+            const oldAppointmentId =
+                Number(rescheduleModal.dataset.appointmentId);
+
+            const newAppointmentId =
+                Number(rescheduleSlot.value);
+
+            const originalStaff =
+                (rescheduleModal.dataset.originalStaff || "")
+                    .toLowerCase()
+                    .trim();
+
+            if (!oldAppointmentId) {
+                alert("Unable to identify the appointment.");
+                return;
+            }
+
+            if (!newAppointmentId) {
+                alert("Please select a new appointment.");
+                return;
+            }
+
+            if (!["emma", "sarah"].includes(originalStaff)) {
+                alert("Unable to identify the original tech.");
+                return;
+            }
+
+            // =========================
+            // GET BOTH APPOINTMENTS
+            // =========================
+
+            const { data: oldAppointment, error: oldError } =
+                await client
+                    .from("appointments")
+                    .select("id, date, time, booked, cancelled, assigned_staff")
+                    .eq("id", oldAppointmentId)
+                    .single();
+
+            if (oldError || !oldAppointment) {
+                console.error(
+                    "Error loading current appointment:",
+                    oldError
+                );
+
+                alert("Unable to load the current appointment.");
+                return;
+            }
+
+            const { data: newAppointment, error: newError } =
+                await client
+                    .from("appointments")
+                    .select("id, date, time, booked, cancelled, assigned_staff")
+                    .eq("id", newAppointmentId)
+                    .single();
+
+            if (newError || !newAppointment) {
+                console.error(
+                    "Error loading selected appointment:",
+                    newError
+                );
+
+                alert("Unable to load the selected appointment.");
+                return;
+            }
+
+            const oldStaff =
+                (oldAppointment.assigned_staff || "")
+                    .toLowerCase()
+                    .trim();
+
+            const newStaff =
+                (newAppointment.assigned_staff || "")
+                    .toLowerCase()
+                    .trim();
+
+            // Verify the original appointment is still booked.
+            if (
+                oldAppointment.booked !== true ||
+                oldAppointment.cancelled === true ||
+                oldStaff !== originalStaff
+            ) {
+                alert(
+                    "The original appointment has changed. Please reload the page and try again."
+                );
+
+                await loadAppointments();
+                return;
+            }
+
+            // Verify the selected slot is still available.
+            if (
+                newAppointment.booked !== false ||
+                newAppointment.cancelled === true ||
+                !["emma", "sarah"].includes(newStaff)
+            ) {
+                alert(
+                    "That appointment is no longer available. Please choose another."
+                );
+
+                await loadAppointments();
+                return;
+            }
+
+            // Make sure the slot matches the selected tech choice.
+            const selectedChoice =
+                document.querySelector(
+                    'input[name="rescheduleTechChoice"]:checked'
+                )?.value || "same";
+
+            const expectedStaff =
+                selectedChoice === "same"
+                    ? originalStaff
+                    : selectedChoice === "switch"
+                        ? (originalStaff === "emma" ? "sarah" : "emma")
+                        : newStaff;
+
+            if (
+                newStaff !== expectedStaff ||
+                !["same", "switch", "any"].includes(selectedChoice)
+            ) {
+                alert(
+                    "The selected slot does not match the chosen tech. Please select a slot again."
+                );
+                return;
+            }
+
+            // =========================
+            // SAVE ORIGINAL SLOT DETAILS
+            // =========================
+
+            const oldDate = oldAppointment.date;
+            const oldTime = oldAppointment.time;
+
+            const newDate = newAppointment.date;
+            const newTime = newAppointment.time;
+
+            // =========================
+            // MOVE THE BOOKED APPOINTMENT
+            // Keep its ID and patron information.
+            // =========================
+
+            const { error: moveError } =
+                await client
+                    .from("appointments")
+                    .update({
+                        date: newDate,
+                        time: newTime,
+                        assigned_staff: newStaff,
+                        appointment_confirmed: false
+                    })
+                    .eq("id", oldAppointmentId)
+                    .eq("booked", true);
+
+            if (moveError) {
+                console.error(
+                    "Error moving appointment:",
+                    moveError
+                );
+
+                alert("Unable to reschedule the appointment.");
+                return;
+            }
+
+            // =========================
+            // RETURN THE ORIGINAL SLOT
+            // Restore its original tech assignment.
+            // =========================
+
+            const { error: freeError } =
+                await client
+                    .from("appointments")
+                    .update({
+                        date: oldDate,
+                        time: oldTime,
+                        assigned_staff: oldStaff,
+                        booked: false,
+                        cancelled: false,
+                        appointment_confirmed: false,
+                        staff_initials: null
+                    })
+                    .eq("id", newAppointmentId)
+                    .eq("booked", false)
+                    .eq("cancelled", false);
+
+            if (freeError) {
+                console.error(
+                    "Error returning original slot:",
+                    freeError
+                );
+
+                // Attempt to restore the booked appointment.
+                const { error: rollbackError } =
+                    await client
+                        .from("appointments")
+                        .update({
+                            date: oldDate,
+                            time: oldTime,
+                            assigned_staff: oldStaff
+                        })
+                        .eq("id", oldAppointmentId);
+
+                if (rollbackError) {
+                    console.error(
+                        "Rollback failed:",
+                        rollbackError
+                    );
+
+                    alert(
+                        "The reschedule encountered an error, and automatic recovery was unsuccessful. Please check the appointment in Supabase before trying again."
+                    );
+                } else {
+                    alert(
+                        "The appointment could not be fully rescheduled. The original appointment was restored."
+                    );
+                }
+
+                await loadAppointments();
+                return;
+            }
+
+            // =========================
+            // CLOSE MODAL AND REFRESH
+            // =========================
+
+            rescheduleModal.style.display = "none";
+            rescheduleSlot.value = "";
+
+            await loadAppointments();
+
+            alert("Appointment successfully rescheduled.");
+
+        });
 
 // =========================
 // ADMIN SEARCH
