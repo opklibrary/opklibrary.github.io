@@ -137,7 +137,7 @@
 
     </main>
     
-<!-- =========================
+<!-- ========================
      RESCHEDULE MODAL
 ========================= -->
 
@@ -148,6 +148,46 @@
         <h2>Reschedule Appointment</h2>
 
         <p id="rescheduleCurrentAppointment"></p>
+
+        <p>Who should the new appointment be with?</p>
+
+        <div class="reschedule-tech-options">
+
+            <label class="reschedule-tech-option">
+                <input
+                    type="radio"
+                    name="rescheduleTechChoice"
+                    value="same"
+                    checked>
+                <span>
+                    <strong>Keep Same Tech</strong>
+                    <small id="sameTechName">Book original tech</small>
+                </span>
+            </label>
+
+            <label class="reschedule-tech-option">
+                <input
+                    type="radio"
+                    name="rescheduleTechChoice"
+                    value="switch">
+                <span>
+                    <strong>Switch Tech</strong>
+                    <small id="otherTechName">Book other tech</small>
+                </span>
+            </label>
+
+            <label class="reschedule-tech-option">
+                <input
+                    type="radio"
+                    name="rescheduleTechChoice"
+                    value="any">
+                <span>
+                    <strong>First Available — Any Tech</strong>
+                    <small>Book whoever has the earliest opening</small>
+                </span>
+            </label>
+
+        </div>
 
         <label for="rescheduleSlot">
             Choose a new appointment:
@@ -172,7 +212,6 @@
     </div>
 
 </div>
-    
 
     <!-- =========================
          JAVASCRIPT
