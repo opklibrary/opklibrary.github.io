@@ -370,8 +370,16 @@ card.classList.add(staffClass);
         }
 
         card.innerHTML = `
-        
+
+        <div class="appointment-card-header"> 
         <div class="assigned-staff-label">${staffName}</div>
+        
+        <button class="staff-notes-button" 
+            type="button"
+            title="View or edit private staff notes">
+        ${appointment.staff_notes?.trim() ? "📝" : "+"}
+    </button>
+</div>
         
             <h2>${formattedDate}</h2>
 
