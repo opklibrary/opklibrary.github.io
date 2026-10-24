@@ -622,7 +622,6 @@ if (confirmButton) {
                             .from("appointments")
                             .select("id, date, time, assigned_staff, booked, cancelled")
                             .eq("booked", false)
-                            .eq("cancelled", false)
                             .order("date")
                             .order("time");
 
@@ -927,7 +926,6 @@ cancelReschedule.addEventListener("click", () => {
             // Verify the selected slot is still available.
             if (
                 newAppointment.booked !== false ||
-                newAppointment.cancelled === true ||
                 !["emma", "sarah"].includes(newStaff)
             ) {
                 alert(
@@ -1017,7 +1015,6 @@ cancelReschedule.addEventListener("click", () => {
                     })
                     .eq("id", newAppointmentId)
                     .eq("booked", false)
-                    .eq("cancelled", false);
 
             if (freeError) {
                 console.error(
