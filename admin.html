@@ -213,6 +213,67 @@
 
 </div>
 
+    
+<!-- ========================
+     PRIVATE STAFF NOTES MODAL
+========================= -->
+
+<div id="staffNotesModal" class="staff-notes-modal">
+
+    <div class="staff-notes-box">
+
+        <h2>Private Staff Notes</h2>
+
+        <!-- Viewing existing notes -->
+        <div id="staffNotesView">
+
+            <p id="staffNotesDisplay"></p>
+
+            <div class="staff-notes-actions">
+
+                <button id="editStaffNotes">
+                    Edit Note
+                </button>
+
+                <button id="closeStaffNotes">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Editing or creating notes -->
+        <div id="staffNotesEdit" style="display: none;">
+
+            <textarea
+                id="staffNotesInput"
+                placeholder="Enter private notes for library staff..."
+                rows="6">
+            </textarea>
+
+            <div class="staff-notes-actions">
+
+                <button id="saveStaffNotes">
+                    Save Changes
+                </button>
+
+                <button id="clearStaffNotes">
+                    Clear Note
+                </button>
+
+                <button id="cancelStaffNotesEdit">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
     <!-- =========================
          JAVASCRIPT
          ========================= -->
