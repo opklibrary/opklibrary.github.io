@@ -747,41 +747,26 @@ const staffNotesButton =
     card.querySelector(".staff-notes-button");
 
 if (staffNotesButton) {
-    staffNotesButton.addEventListener("click", async () => {
+    staffNotesButton.addEventListener("click", () => {
+        const modal = document.getElementById("staffNotesModal");
+        const view = document.getElementById("staffNotesView");
+        const edit = document.getElementById("staffNotesEdit");
+        const display = document.getElementById("staffNotesDisplay");
+        const input = document.getElementById("staffNotesInput");
+
         const existingNotes = appointment.staff_notes || "";
 
-        const newNotes = prompt(
-            "Private staff notes for this appointment:\n\n" +
-            "(These notes are only for library staff.)",
-            existingNotes
-        );
+        display.textContent = existingNotes || "No private notes have been added.";
+        input.value = existingNotes;
 
-        // Cancel was clicked; do not change anything.
-        if (newNotes === null) {
-            return;
+        view.style.display = existingNotes ? "block" : "none";
+        edit.style.display = existingNotes ? "none" : "block";
+
+        modal.style.display = "flex";
+
+        if (!existingNotes) {
+            input.focus();
         }
-
-        const trimmedNotes = newNotes.trim();
-
-        const { error } = await client
-            .from("appointments")
-            .update({
-                staff_notes: trimmedNotes || null
-            })
-            .eq("id", appointment.id);
-
-        if (error) {
-            console.error("Error saving staff notes:", error);
-            alert("Unable to save staff notes. Please try again.");
-            return;
-        }
-
-        appointment.staff_notes = trimmedNotes;
-
-        staffNotesButton.textContent =
-            trimmedNotes ? "📝" : "+";
-
-        alert("Staff notes saved.");
     });
 }
         
