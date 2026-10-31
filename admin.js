@@ -70,14 +70,15 @@ async function loadAppointments() {
                 what_tech,
                 submitted_at
             ),
-            why_appointment (
-                learn,
-                need,
-                new,
-                help,
-                other,
-                describe_problem
-            )
+           why_appointment (
+            id,
+            learn,
+            need,
+            new,
+            help,
+            other,
+            describe_problem
+        )
         `)
         .order("date")
         .order("time");
@@ -267,7 +268,8 @@ appointmentsToDisplay.sort((a, b) => {
         new Date(a.submitted_at || 0)
     )[0];
 
-const reason = appointment.why_appointment?.[0];
+const reason = [...(appointment.why_appointment || [])]
+    .sort((a, b) => b.id - a.id)[0];
 
         // =========================
         // SUBMITTED TIME
